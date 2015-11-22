@@ -1,3 +1,7 @@
+/*
+ * Created by: Mon, Matt, and James
+ * 
+ */
 using System;
 using Gtk;
 
