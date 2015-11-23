@@ -4,12 +4,13 @@
  */
 using System;
 using Gtk;
+using uLOLCODEv2;
 
 public partial class MainWindow: Gtk.Window
 {		
 	Gtk.ListStore lexModel = new Gtk.ListStore(typeof(string),typeof(string));
-	Gtk.ListStore treeview2 = new Gtk.ListStore(typeof(string),typeof(string));
-
+	Gtk.ListStore symbolTable = new Gtk.ListStore(typeof(string),typeof(string));
+	EmptyClass shizz = new EmptyClass ();
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
@@ -30,7 +31,7 @@ public partial class MainWindow: Gtk.Window
 		treeview1.AppendColumn (lexemeCol);
 		treeview1.AppendColumn (classificationCol);
 
-		treeview1.Model = treeview1;
+		treeview1.Model = lexModel;
 		Gtk.CellRendererText lexemeCell = new Gtk.CellRendererText ();
 		lexemeCol.PackStart (lexemeCell, true);
 		Gtk.CellRendererText classCell = new Gtk.CellRendererText ();
@@ -52,7 +53,7 @@ public partial class MainWindow: Gtk.Window
 		treeview2.AppendColumn (identifierCol);
 		treeview2.AppendColumn (valueCol);
 
-		treeview2.Model = treeview2;
+		treeview2.Model = symbolTable;
 		Gtk.CellRendererText identifierCell = new Gtk.CellRendererText ();
 		identifierCol.PackStart (identifierCell, true);
 		Gtk.CellRendererText valueCell = new Gtk.CellRendererText ();
@@ -70,9 +71,9 @@ public partial class MainWindow: Gtk.Window
 
 	protected void executeCode (object sender, EventArgs e)
 	{
-		consoleText.Buffer.Text = ("");
-		treeview1.Clear ();
-		treeview2.Clear ();
+		consoleText.Buffer.Text += shizz.printHello();
+		lexModel.Clear ();
+		symbolTable.Clear ();
 	}
 
 	protected void openCODE (object sender, EventArgs e)
