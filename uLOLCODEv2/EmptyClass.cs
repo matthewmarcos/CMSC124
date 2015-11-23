@@ -1,4 +1,5 @@
 using System;
+using Gtk;
 
 namespace uLOLCODEv2
 {
@@ -9,6 +10,11 @@ namespace uLOLCODEv2
 		}
 		public String printHello() {
 			return "I like to hintai!";
+		}
+		public void accessTextView(TextView nigga,String stuff){
+
+			nigga.Buffer.Text += stuff;
+
 		}
 	}
 }

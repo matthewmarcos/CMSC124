@@ -11,6 +11,7 @@ public partial class MainWindow: Gtk.Window
 	Gtk.ListStore lexModel = new Gtk.ListStore(typeof(string),typeof(string));
 	Gtk.ListStore symbolTable = new Gtk.ListStore(typeof(string),typeof(string));
 	EmptyClass shizz = new EmptyClass ();
+	
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
@@ -72,8 +73,10 @@ public partial class MainWindow: Gtk.Window
 	protected void executeCode (object sender, EventArgs e)
 	{
 		consoleText.Buffer.Text += shizz.printHello();
+
 		lexModel.Clear ();
 		symbolTable.Clear ();
+		shizz.shitMe (inputCode);
 	}
 
 	protected void openCODE (object sender, EventArgs e)
