@@ -1,6 +1,12 @@
 ﻿<Properties StartupItem="uLOLCODEv2/uLOLCODEv2.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/MainWindow.cs">
+    <Files>
+      <File FileName="uLOLCODEv2/Program.cs" Line="11" Column="3" />
+      <File FileName="uLOLCODEv2/MainWindow.cs" Line="55" Column="12" />
+      <File FileName="uLOLCODEv2/EmptyClass.cs" Line="5" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
