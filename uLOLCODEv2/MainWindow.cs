@@ -11,7 +11,8 @@ public partial class MainWindow: Gtk.Window
 	Gtk.ListStore lexModel = new Gtk.ListStore(typeof(string),typeof(string));
 	Gtk.ListStore symbolTable = new Gtk.ListStore(typeof(string),typeof(string));
 	EmptyClass shizz = new EmptyClass ();
-	
+	Identifier ident = new Identifier();
+
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
@@ -72,11 +73,16 @@ public partial class MainWindow: Gtk.Window
 
 	protected void executeCode (object sender, EventArgs e)
 	{
-		consoleText.Buffer.Text += shizz.printHello();
-
+		//consoleText.Buffer.Text += shizz.printHello();
+		String[,] chepar;
 		lexModel.Clear ();
 		symbolTable.Clear ();
-		shizz.shitMe (inputCode);
+		//shizz.accessTextView(inputCode, "Hello");
+		chepar = ident.getLineType ("SMOOSH VAR1 444 HELLO MKAY", consoleText);
+		consoleText.Buffer.Text += "\nCheparlu[0,0]: " + chepar[0,0] + "\n";
+		consoleText.Buffer.Text += "\nCheparlu[0,1]: " + chepar[0,1] + "\n";
+		// hindi ko matest yung string kasi ayaw niya ng double quotation mark #pabebe
+		//consoleText.Buffer.Text += chepar[0,0] + chepar[0,1];
 	}
 
 	protected void openCODE (object sender, EventArgs e)
