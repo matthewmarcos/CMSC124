@@ -1,0 +1,6 @@
+/home/matt/Documents/CS124PROJECT/uLOLCODEv2/obj/x86/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/home/matt/Documents/CS124PROJECT/uLOLCODEv2/obj/x86/Debug/uLOLCODEv2.gtk-gui.gui.stetic
+/home/matt/Documents/CS124PROJECT/uLOLCODEv2/bin/Debug/uLOLCODEv2.exe.mdb
+/home/matt/Documents/CS124PROJECT/uLOLCODEv2/bin/Debug/uLOLCODEv2.exe
+/home/matt/Documents/CS124PROJECT/uLOLCODEv2/obj/x86/Debug/uLOLCODEv2.exe
+/home/matt/Documents/CS124PROJECT/uLOLCODEv2/obj/x86/Debug/uLOLCODEv2.exe.mdb

@@ -12,6 +12,7 @@ public partial class MainWindow: Gtk.Window
 	Gtk.ListStore symbolTable = new Gtk.ListStore(typeof(string),typeof(string));
 	EmptyClass shizz = new EmptyClass ();
 	Identifier ident = new Identifier();
+	//EvalClass eval = new EvalClass (symbolTable);
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
@@ -73,16 +74,31 @@ public partial class MainWindow: Gtk.Window
 
 	protected void executeCode (object sender, EventArgs e)
 	{
-		//consoleText.Buffer.Text += shizz.printHello();
-		String[,] chepar;
+		consoleText.Buffer.Text = "";
+		String code = inputCode.Buffer.Text;
+		String[,] codeLabels;
 		lexModel.Clear ();
 		symbolTable.Clear ();
 		//shizz.accessTextView(inputCode, "Hello");
-		chepar = ident.getLineType ("SMOOSH VAR1 444 HELLO MKAY", consoleText);
-		consoleText.Buffer.Text += "\nCheparlu[0,0]: " + chepar[0,0] + "\n";
-		consoleText.Buffer.Text += "\nCheparlu[0,1]: " + chepar[0,1] + "\n";
-		// hindi ko matest yung string kasi ayaw niya ng double quotation mark #pabebe
-		//consoleText.Buffer.Text += chepar[0,0] + chepar[0,1];
+		char[] splitToken = {'\n'};
+		String[] lines = code.Split (splitToken);
+		for(var i = 0 ;i < lines.Length ; i++) {
+			codeLabels = ident.getLineType (lines[i], consoleText);
+
+			resolveLabels (codeLabels);
+			//if (codeLabels [codeLabels.Rank - 1, 1].Equals ("Error!")) {
+	//			continue;
+	//		}
+			//resolveLabels (codeLabels);
+			//drawSymbolTree()
+		}
+	}
+
+	protected void resolveLabels(String[,] codeLabels) {
+		for(var j = 0 ; j < codeLabels.Rank ; j++) {
+			consoleText.Buffer.Text += "Statement: " +
+				codeLabels [j, 0] + " | TYPE: " + codeLabels[j, 1] +  "\n";
+		}
 	}
 
 	protected void openCODE (object sender, EventArgs e)

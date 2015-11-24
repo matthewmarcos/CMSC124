@@ -25,9 +25,9 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "varDecNoInit";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+					//consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+					//consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+					//consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -40,15 +40,15 @@ namespace uLOLCODEv2
 				 * 3. General ang pag-identify ng lexemes e.g. SUM OF <exp> AN <exp> ay kaya
 				 * 	  na niyang ma-detect kung var, expression ulit, numbr/numbar, etc.
 				 */
-				m = Regex.Match (line, @"^\s*I\s+HAS\s+A\s+[a-zA-Z][a-zA-Z\d]*\s+ITZ\s+[""a-zA-Z\d]*$");
+				m = Regex.Match (line, @"^\s*I\s+HAS\s+A\s+[a-zA-Z][a-zA-Z\d]*\s+ITZ\s+[""a-zA-Z\d]*\s*");
 				if (m.Success) {
 					tempString [currentLength, 0] = m.Value;
 					tempString [currentLength, 1] = "varDecWithInit";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -60,22 +60,22 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "assValToVar";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
 				/* BTW <comments> */
-				m = Regex.Match (line, @"^\s*BTW\s+.*$");
+				m = Regex.Match (line, @"\s*BTW\s+.*$");
 				if (m.Success) {
 					tempString [currentLength, 0] = m.Value;
 					tempString [currentLength, 1] = "oneLineComm";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -90,9 +90,9 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "startOfMulComm";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -107,9 +107,9 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "endOfMulComm";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -123,9 +123,9 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "addOp";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -139,9 +139,9 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "andOp";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
@@ -154,15 +154,15 @@ namespace uLOLCODEv2
 					tempString [currentLength, 1] = "strConcat";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
-					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
-					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
-					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+//					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
+//					consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
+//					consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
 					continue;
 				}
 
 
 
-				consoleText.Buffer.Text += "Error 404: Not Found!!";
+//				consoleText.Buffer.Text += "Error 404: Not Found!!";
 				tempString [currentLength, 0] = "";
 				tempString [currentLength, 1] = "Error!";
 				return tempString;
