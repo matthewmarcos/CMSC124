@@ -5,14 +5,16 @@
 using System;
 using Gtk;
 using uLOLCODEv2;
+using System.Collections;
 
 public partial class MainWindow: Gtk.Window
 {		
 	Gtk.ListStore lexModel = new Gtk.ListStore(typeof(string),typeof(string));
-	Gtk.ListStore symbolTable = new Gtk.ListStore(typeof(string),typeof(string));
+	Gtk.ListStore symbolTree = new Gtk.ListStore(typeof(string),typeof(string));
+	Hashtable symbolTable = new Hashtable ();
 	EmptyClass shizz = new EmptyClass ();
 	Identifier ident = new Identifier();
-	//EvalClass eval = new EvalClass (symbolTable);
+	EvalClass eval = new EvalClass ();
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
@@ -56,7 +58,7 @@ public partial class MainWindow: Gtk.Window
 		treeview2.AppendColumn (identifierCol);
 		treeview2.AppendColumn (valueCol);
 
-		treeview2.Model = symbolTable;
+		treeview2.Model = symbolTree;
 		Gtk.CellRendererText identifierCell = new Gtk.CellRendererText ();
 		identifierCol.PackStart (identifierCell, true);
 		Gtk.CellRendererText valueCell = new Gtk.CellRendererText ();
@@ -78,26 +80,36 @@ public partial class MainWindow: Gtk.Window
 		String code = inputCode.Buffer.Text;
 		String[,] codeLabels;
 		lexModel.Clear ();
+		symbolTree.Clear ();
 		symbolTable.Clear ();
 		//shizz.accessTextView(inputCode, "Hello");
 		char[] splitToken = {'\n'};
 		String[] lines = code.Split (splitToken);
 		for(var i = 0 ;i < lines.Length ; i++) {
 			codeLabels = ident.getLineType (lines[i], consoleText);
-
 			resolveLabels (codeLabels);
-			//if (codeLabels [codeLabels.Rank - 1, 1].Equals ("Error!")) {
-	//			continue;
-	//		}
-			//resolveLabels (codeLabels);
-			//drawSymbolTree()
 		}
 	}
 
 	protected void resolveLabels(String[,] codeLabels) {
-		for(var j = 0 ; j < codeLabels.Rank ; j++) {
+		for(var j = 0 ; j < codeLabels.Rank ; j++) {			
 			consoleText.Buffer.Text += "Statement: " +
 				codeLabels [j, 0] + " | TYPE: " + codeLabels[j, 1] +  "\n";
+//			if(codeLabels[j, 1].Equals("varDecNoInit"){
+				//
+				eval.varDecNoInit(symbolTable, lexModel, codeLabels[j, 0]);
+				updateSymbolTable ();
+				break;
+//			}
+
+
+		}
+	}
+
+	protected void updateSymbolTable() {
+		symbolTree.Clear ();
+		foreach(DictionaryEntry pair in symbolTable) {
+			symbolTree.AppendValues (pair.Key, pair.Value);
 		}
 	}
 
