@@ -49,6 +49,7 @@
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Open File</property>
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="openCODE" />
                       </widget>
                       <packing>
                         <property name="Resize">False</property>

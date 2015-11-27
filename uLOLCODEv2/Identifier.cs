@@ -1,6 +1,7 @@
 using System;
 using Gtk;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace uLOLCODEv2
 {
@@ -9,10 +10,11 @@ namespace uLOLCODEv2
 		public Identifier ()
 		{
 		}
-		public String[,] getLineType(String line, TextView consoleText) {
+
+		public List<List<String>> getLineType(String line, TextView consoleText) {
 			int currentLength = 0;
 
-			String[,] tempString = new String[2,2];
+			List<List<String>> tempString = new List<List<String>> ();
 
 			Match m;
 			while (line.Length != 0) {
@@ -21,13 +23,15 @@ namespace uLOLCODEv2
 				/* I HAS A <varident> */
 				m = Regex.Match (line, @"^\s*I\s+HAS\s+A\s+[a-zA-Z][a-zA-Z\d]*\s*$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "varDecNoInit";
-					currentLength += 1;
+					List<String> temp = new List<string> ();
+					temp.Add(m.Value);
+					temp.Add("varDecNoInit");
+					//currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 					//consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
 					//consoleText.Buffer.Text += tempString[currentLength-1, 1] + "\n";
 					//consoleText.Buffer.Text += "Remaining Lexeme Length: " + line.Length;
+					tempString.Add (temp);
 					continue;
 				}
 
@@ -40,10 +44,11 @@ namespace uLOLCODEv2
 				 * 3. General ang pag-identify ng lexemes e.g. SUM OF <exp> AN <exp> ay kaya
 				 * 	  na niyang ma-detect kung var, expression ulit, numbr/numbar, etc.
 				 */
+
 				m = Regex.Match (line, @"^\s*I\s+HAS\s+A\s+[a-zA-Z][a-zA-Z\d]*\s+ITZ\s+[""a-zA-Z\d]*\s*");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "varDecWithInit";
+					//tempString [currentLength, 0] = m.Value;
+					//tempString [currentLength, 1] = "varDecWithInit";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -56,8 +61,8 @@ namespace uLOLCODEv2
 				m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-Z\d]*\s+R\s+[""a-zA-Z\d]*$");
 				// need to improve lexical detection for strings
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "assValToVar";
+					//tempString [currentLength, 0] = m.Value;
+					//tempString [currentLength, 1] = "assValToVar";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -69,8 +74,8 @@ namespace uLOLCODEv2
 				/* BTW <comments> */
 				m = Regex.Match (line, @"\s*BTW\s+.*$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "oneLineComm";
+				//	tempString [currentLength, 0] = m.Value;
+					//tempString [currentLength, 1] = "oneLineComm";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -86,8 +91,8 @@ namespace uLOLCODEv2
 				 */
 				m = Regex.Match (line, @"^\s*OBTW\s*$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "startOfMulComm";
+				//	tempString [currentLength, 0] = m.Value;
+				//	tempString [currentLength, 1] = "startOfMulComm";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -103,8 +108,8 @@ namespace uLOLCODEv2
 				 */
 				m = Regex.Match (line, @"^\s*TLDR\s*$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "endOfMulComm";
+				//	tempString [currentLength, 0] = m.Value;
+				//	tempString [currentLength, 1] = "endOfMulComm";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -119,8 +124,8 @@ namespace uLOLCODEv2
 				 */
 				m = Regex.Match (line, @"^\s*SUM\s+OF\s+[""a-zA-Z\d]*\s+AN\s+[""a-zA-Z\d]*$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "addOp";
+					//tempString [currentLength, 0] = m.Value;
+					//tempString [currentLength, 1] = "addOp";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -135,8 +140,8 @@ namespace uLOLCODEv2
 				 */
 				m = Regex.Match (line, @"^\s*BOTH\s+OF\s+[""a-zA-Z\d]*\s+AN\s+[""a-zA-Z\d]*$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "andOp";
+					//tempString [currentLength, 0] = m.Value;
+					//tempString [currentLength, 1] = "andOp";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -150,8 +155,8 @@ namespace uLOLCODEv2
 				 */
 				m = Regex.Match (line, @"^\s*SMOOSH\s+[""a-zA-Z\d]*\s+[""a-zA-Z\d]*\s+[""a-zA-Z\d]*\s+MKAY$");
 				if (m.Success) {
-					tempString [currentLength, 0] = m.Value;
-					tempString [currentLength, 1] = "strConcat";
+				//	tempString [currentLength, 0] = m.Value;
+				//	tempString [currentLength, 1] = "strConcat";
 					currentLength += 1;
 					line = line.Remove (m.Index, m.Index + m.Length);
 //					consoleText.Buffer.Text += tempString[currentLength-1, 0] + "\n";
@@ -163,12 +168,19 @@ namespace uLOLCODEv2
 
 
 //				consoleText.Buffer.Text += "Error 404: Not Found!!";
-				tempString [currentLength, 0] = "";
-				tempString [currentLength, 1] = "Error!";
+				//tempString [currentLength, 0] = "";
+				//tempString [currentLength, 1] = "Error!";
 				return tempString;
 			}
 			return tempString;
 		}
+
+//		public Boolean isReservedWord(String variable) {
+//			if(variable.Equals("HAS") | 
+//			   variable.Equals("")) {
+//
+//			}
+//		}
 	}
 }
 
