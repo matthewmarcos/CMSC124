@@ -61,9 +61,11 @@ namespace uLOLCODEv2
 					//Fix symbol table
 					if(!symbolTable.ContainsKey(expression[0])) {
 						symbolTable.Add(expression[0], "NOOB");
+						return;
 					} else {
 						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
 							": variable " + expression[0] + " is already used!\n";
+							return;
 					}
 				}
 			}
@@ -79,9 +81,11 @@ namespace uLOLCODEv2
 						// or complexExpression that is valid. Already evaluate it lang. plz.
 
 						symbolTable.Add(expression[0], expression[1]);
+						return;
 					} else {
 						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
 							": variable " + expression[0] + " is already used!\n";
+						return;
 					}
 				}
 			}
@@ -91,9 +95,139 @@ namespace uLOLCODEv2
 		}
 
 		public void evalVisible(String line, Hashtable symbolTable, TextView consoleText, int lineNumber) {
-		
+		/*valid variable?
+		 * Check if string literal then print
+		 * if not
+		 * 
+		 * check if nasa symbol table na
+		 * if wala then error
+		 * 
+		 *  
+		 * 
+		 *CHECK MUNA KUNG STRING LITERAL. PRINT AGAD
+		 *IF VARIABLE CHECK IF VALID THEN CHECK VALUE
+		 *IF NUMBAR THEN PRINT AGAD
+		 *IF EXPRESSION BANG.
+		 * 
+			 */
+			Match m;
+			char[] splitToken = {' '}; //<=== tentative
+			String[] expression = line.Split (splitToken);
+
+
+			if(expression.Length == 1) {
+			
+				//CHECK IF STRING LITERAL
+
+				//======Start of string literal eval ============//
+
+				// !!! ISSUE: String literal with spaces.   Ex.   "S hit"; <----------------------------------------------------------
+				m = Regex.Match (expression[0], @"^\s*""");
+				if (m.Success) {
+					String sline = expression[0];		//<--- for clarity's sake
+					String stringLiteral = "";
+					sline = sline.Remove (0, m.Value.Length);
+					String matchedString = m.Value;
+
+					for(; sline.Length > 0 && sline[0] != '"';) {
+						stringLiteral += sline[0];
+						sline = sline.Remove(0, 1);
+
+					}
+
+					if(sline.Length != 0) {
+
+						consoleText.Buffer.Text += (stringLiteral+"\n");
+						sline = sline.Remove(0, 1);
+					} else {
+
+						//ERROR -> unpaired quotation mark
+						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "! : Unpaired quotes (Visible Func)\n";
+
+					}
+					return;
+
+				}
+				//=======End of String Literal Eval ============//
+
+				//==================VARIABLE==========================//
+				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
+				if(isValidVarident(expression[0]) && m.Success) {
+						//If wala sa symbol table
+					if(!symbolTable.ContainsKey(expression[0])) {	//if wala pa sa symbol table
+
+						consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Variable undeclared(Visible Func)\n");
+						return;
+					} else {
+							//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
+						var stringLit = symbolTable[expression[0]];
+						String printThis = stringLit.ToString();			//<------ Gawin String yung returned object;
+						String printTlaga = "";
+						printThis = printThis.Remove(0,1);
+						//printThis.Remove(0,1);
+						for(; printThis.Length > 0 && printThis[0] != '"';) {
+							printTlaga += printThis[0];
+							printThis = printThis.Remove(0, 1);
+
+						}
+
+
+						consoleText.Buffer.Text += (printTlaga+ "\n");
+
+						return;
+					}
+				}
+				//==================END OF VAR EVAL=====================//
+			
+				//==================Number Literal =====================//
+				m = Regex.Match (expression[0], @"^\-?\d*\.\d+\s*");
+				if (m.Success) {
+
+					String matchedString = m.Value;
+					matchedString = matchedString.Trim ();
+					consoleText.Buffer.Text += matchedString+"\n";
+					return;
+				}
+
+				m = Regex.Match (expression[0], @"^\-?\d+\s*");
+				if (m.Success) {
+				
+					String matchedString = m.Value;
+					matchedString = matchedString.Trim ();
+					consoleText.Buffer.Text += matchedString+"\n";
+					return;
+				}
+
+
+				//===============End of Number Literal==============//
+			
+			}
+
+
+			//================//
+
 		}
 
+		public void evalGimmeh(String line, Hashtable symbolTable,TextView consoleText,int lineNumber){
+
+			//check variable "line"
+
+			Match m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
+			if(isValidVarident(line) && m.Success) {
+				//If wala sa symbol table
+				if(!symbolTable.ContainsKey(line)) {	//if wala pa sa symbol table
+
+					consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Variable undeclared(Gimmeh Func)\n");
+					return;
+				} else {
+					//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
+					//Get the value
+					onGIMMEH(consoleText);
+				
+				}
+			}
+		
+		}
 		public Boolean hasValidStartAndEnd (String[] lines) {
 			/*
 			 *	Check if code starts and ends with HAI KTHXBYE 
@@ -104,6 +238,54 @@ namespace uLOLCODEv2
 				return false;
 			}
 		}
+		//Create input box
+		public void onGIMMEH(TextView consoleText){
+
+			//Create a new window to contain the Entry box and the button to send it
+			Window input = new Window ("Input");
+			input.Resize (350, 100);
+
+			//VBox as a container to allow the two widgets in 1 place
+			VBox boxx = new VBox ();
+
+			//Entry widget to hold the text
+			Entry inputBox = new Entry ();
+			inputBox.SetSizeRequest (100, 30);
+
+			//Button to handle the input
+			Button send = new Button ();
+			send.Label = "Input";
+			//send.Activated += sendCode (inputBox,consoleText); <========= From here, check below
+			/*Event onclick of button:
+			 * get the text from the Entry widget
+			 * store it
+			 * then update the value in symbol Table
+			 * 
+			 * 
+			 * 
+			 * 
+			 * then symbolTable[variable] = storedValue;
+			 * 
+			 * 
+			 * 
+			 * 
+			 * */
+
+
+			//add the Vbox first
+			input.Add (boxx);
+			//Add Entry and Button to contain 
+			boxx.Add (inputBox);
+			boxx.Add (send);
+
+			//show all the widgets
+			input.ShowAll ();
+		}
+		//public EventHandler sendCode(Entry inputBox,TextView consoleText){
+		
+		//	consoleText.Buffer.Text = inputBox.Text;
+		//}
+	
 		/*
 		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez, Gtk.ListStore lexmodelz) {
 			this.lexModel = lexmodelz;
@@ -122,4 +304,3 @@ namespace uLOLCODEv2
 
 	}
 }
-

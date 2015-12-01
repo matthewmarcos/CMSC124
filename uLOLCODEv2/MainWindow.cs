@@ -18,10 +18,10 @@ public partial class MainWindow: Gtk.Window
 	EvalClass eval = new EvalClass ();
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
-	{
+	{	
 		Build ();
 		populateTreeView ();
-
+		inputCode.Buffer.Text = ("HAI\n\nKTHXBYE");
 	}
 
 	public void populateTreeView(){
@@ -365,6 +365,7 @@ public partial class MainWindow: Gtk.Window
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
 				lexModel.AppendValues (matchedString, "Scan Op");
+				eval.evalGimmeh (line, symbolTable,consoleText,lineNumber);
 				continue;
 			}
 
