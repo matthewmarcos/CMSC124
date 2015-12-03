@@ -365,7 +365,11 @@ public partial class MainWindow: Gtk.Window
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
 				lexModel.AppendValues (matchedString, "Scan Op");
+<<<<<<< HEAD
 				eval.evalGimmeh (line, symbolTable,consoleText,lineNumber,symbolTree);
+=======
+				eval.evalGimmeh (line, symbolTable,consoleText,lineNumber);
+>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 				continue;
 			}
 

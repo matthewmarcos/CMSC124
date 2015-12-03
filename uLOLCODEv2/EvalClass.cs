@@ -208,6 +208,7 @@ namespace uLOLCODEv2
 
 		}
 
+
 		public void evalGimmeh(String line, Hashtable symbolTable,TextView consoleText,int lineNumber,Gtk.ListStore symbolTree){
 
 			//check variable "line"
@@ -222,8 +223,12 @@ namespace uLOLCODEv2
 				} else {
 					//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
 					//Get the value
+//<<<<<<< HEAD
 					onGIMMEH(consoleText,line,symbolTable,symbolTree);
 					//updateSymbolTable (symbolTable,symbolTree);
+//=======
+//					onGIMMEH(consoleText);
+//>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 				
 				}
 			}
@@ -239,10 +244,15 @@ namespace uLOLCODEv2
 				return false;
 			}
 		}
+<<<<<<< HEAD
 
 	
 		//Create input box
 		public void onGIMMEH(TextView consoleText, String variable,Hashtable symbolTable, Gtk.ListStore symbolTree){
+=======
+		//Create input box
+		public void onGIMMEH(TextView consoleText){
+>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 
 			//Create a new window to contain the Entry box and the button to send it
 			Window input = new Window ("Input");
@@ -253,16 +263,39 @@ namespace uLOLCODEv2
 
 			//Entry widget to hold the text
 			Entry inputBox = new Entry ();
+<<<<<<< HEAD
 			inputBox.Name = "inputBox";
+=======
+>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 			inputBox.SetSizeRequest (100, 30);
 
 			//Button to handle the input
 			Button send = new Button ();
+<<<<<<< HEAD
 			send.Name = "send";
 			send.Label = "Input";
 
 			//Add an event handler for a button when clicked.
 			send.Clicked += (sender, e) => sendCode(sender,e,consoleText,inputBox,input,variable,symbolTable,symbolTree);
+=======
+			send.Label = "Input";
+			//send.Activated += sendCode (inputBox,consoleText); <========= From here, check below
+			/*Event onclick of button:
+			 * get the text from the Entry widget
+			 * store it
+			 * then update the value in symbol Table
+			 * 
+			 * 
+			 * 
+			 * 
+			 * then symbolTable[variable] = storedValue;
+			 * 
+			 * 
+			 * 
+			 * 
+			 * */
+
+>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 
 			//add the Vbox first
 			input.Add (boxx);
@@ -273,6 +306,7 @@ namespace uLOLCODEv2
 			//show all the widgets
 			input.ShowAll ();
 		}
+<<<<<<< HEAD
 		public void sendCode(object sender, EventArgs e, TextView consoleText, Entry inputBox, Window input, String variable,Hashtable symbolTable,Gtk.ListStore symbolTree){
 			/*The value input will be given to the var
 			 * 
@@ -289,6 +323,13 @@ namespace uLOLCODEv2
 				symbolTree.AppendValues (pair.Key, pair.Value);
 			}
 		}
+=======
+		//public EventHandler sendCode(Entry inputBox,TextView consoleText){
+		
+		//	consoleText.Buffer.Text = inputBox.Text;
+		//}
+	
+>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 		/*
 		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez, Gtk.ListStore lexmodelz) {
 			this.lexModel = lexmodelz;
