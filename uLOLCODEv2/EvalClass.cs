@@ -323,7 +323,7 @@ namespace uLOLCODEv2
 			// Check if arithmetic operation
 			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)");
 			if(m.Success) {
-				symbolTable [key] = evalComplexArithmetic(expression, consoleText).ToString();
+				symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
 				return true;
 			}
 
@@ -333,7 +333,7 @@ namespace uLOLCODEv2
 		}
 
 
-		public int evalComplexArithmetic (String expression, TextView consoleText) {			
+		public int evalComplexArithmetic (String expression, TextView consoleText, Hashtable symbolTable) {			
 			String splitToken = "[ ]";
 			String[] temp = Regex.Split (expression, splitToken);
 			List<String> operations = new List<String>();
@@ -351,6 +351,10 @@ namespace uLOLCODEv2
 				Boolean isNumeric = int.TryParse(operations[i], out number);
 				if(isNumeric) {
 					stack.Push(number);
+				} else if (Regex.IsMatch(operations[i], @"[a-zA-Z][a-zA-z\d]*") && 
+					symbolTable.ContainsKey(operations[i])) {
+					// If variable that exists in table
+					stack.Push(Int32.Parse((String)symbolTable[operations[i]]));
 				} else if (operations[i].Equals("SUM")) {
 					var a = stack.Pop ();
 					var b = stack.Pop ();
@@ -388,9 +392,9 @@ namespace uLOLCODEv2
 					stack.Push((a > b) ? b : a);
 				}
 			}
+			
 			var res = stack.Pop();
 			consoleText.Buffer.Text += res + "";
-
 			return res;
 
 		}
