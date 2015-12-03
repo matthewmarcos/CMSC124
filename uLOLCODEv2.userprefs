@@ -3,11 +3,7 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/EvalClass.cs">
     <Files>
       <File FileName="uLOLCODEv2/MainWindow.cs" Line="1" Column="1" />
-<<<<<<< HEAD
       <File FileName="uLOLCODEv2/EvalClass.cs" Line="257" Column="30" />
-=======
-      <File FileName="uLOLCODEv2/EvalClass.cs" Line="258" Column="90" />
->>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
       <File FileName="uLOLCODEv2/Identifier.cs" Line="1" Column="1" />
       <File FileName="uLOLCODEv2/EmptyClass.cs" Line="1" Column="1" />
       <File FileName="uLOLCODEv2/Program.cs" Line="1" Column="1" />

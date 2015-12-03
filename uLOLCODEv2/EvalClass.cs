@@ -69,7 +69,6 @@ namespace uLOLCODEv2
 					}
 				}
 			}
-
 			// ITZ ASSIGNMENT
 			if(expression.Length >= 3) {
 				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
@@ -79,8 +78,8 @@ namespace uLOLCODEv2
 						expression = Regex.Split(lines, @"\s+ITZ\s+");
 						//Evaluate the expression[1] if expression is a string,
 						// or complexExpression that is valid. Already evaluate it lang. plz.
-
-						symbolTable.Add(expression[0], expression[1]);
+						evaluateComplex(ref symbolTable, consoleText, expression[0], expression[1]);
+//						symbolTable.Add(expression[0], expression[1]);
 						return;
 					} else {
 						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
@@ -208,7 +207,6 @@ namespace uLOLCODEv2
 
 		}
 
-
 		public void evalGimmeh(String line, Hashtable symbolTable,TextView consoleText,int lineNumber,Gtk.ListStore symbolTree){
 
 			//check variable "line"
@@ -223,12 +221,8 @@ namespace uLOLCODEv2
 				} else {
 					//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
 					//Get the value
-//<<<<<<< HEAD
 					onGIMMEH(consoleText,line,symbolTable,symbolTree);
 					//updateSymbolTable (symbolTable,symbolTree);
-//=======
-//					onGIMMEH(consoleText);
-//>>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 				
 				}
 			}
@@ -244,15 +238,10 @@ namespace uLOLCODEv2
 				return false;
 			}
 		}
-<<<<<<< HEAD
 
 	
 		//Create input box
 		public void onGIMMEH(TextView consoleText, String variable,Hashtable symbolTable, Gtk.ListStore symbolTree){
-=======
-		//Create input box
-		public void onGIMMEH(TextView consoleText){
->>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 
 			//Create a new window to contain the Entry box and the button to send it
 			Window input = new Window ("Input");
@@ -263,39 +252,16 @@ namespace uLOLCODEv2
 
 			//Entry widget to hold the text
 			Entry inputBox = new Entry ();
-<<<<<<< HEAD
 			inputBox.Name = "inputBox";
-=======
->>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 			inputBox.SetSizeRequest (100, 30);
 
 			//Button to handle the input
 			Button send = new Button ();
-<<<<<<< HEAD
 			send.Name = "send";
 			send.Label = "Input";
 
 			//Add an event handler for a button when clicked.
 			send.Clicked += (sender, e) => sendCode(sender,e,consoleText,inputBox,input,variable,symbolTable,symbolTree);
-=======
-			send.Label = "Input";
-			//send.Activated += sendCode (inputBox,consoleText); <========= From here, check below
-			/*Event onclick of button:
-			 * get the text from the Entry widget
-			 * store it
-			 * then update the value in symbol Table
-			 * 
-			 * 
-			 * 
-			 * 
-			 * then symbolTable[variable] = storedValue;
-			 * 
-			 * 
-			 * 
-			 * 
-			 * */
-
->>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
 
 			//add the Vbox first
 			input.Add (boxx);
@@ -306,7 +272,6 @@ namespace uLOLCODEv2
 			//show all the widgets
 			input.ShowAll ();
 		}
-<<<<<<< HEAD
 		public void sendCode(object sender, EventArgs e, TextView consoleText, Entry inputBox, Window input, String variable,Hashtable symbolTable,Gtk.ListStore symbolTree){
 			/*The value input will be given to the var
 			 * 
@@ -317,19 +282,50 @@ namespace uLOLCODEv2
 			updateSymbolTable (symbolTable,symbolTree);
 			input.Destroy ();
 		}
+
 		protected void updateSymbolTable(Hashtable symbolTable, Gtk.ListStore symbolTree) {
 			symbolTree.Clear ();
 			foreach(DictionaryEntry pair in symbolTable) {
 				symbolTree.AppendValues (pair.Key, pair.Value);
 			}
 		}
-=======
-		//public EventHandler sendCode(Entry inputBox,TextView consoleText){
-		
-		//	consoleText.Buffer.Text = inputBox.Text;
-		//}
-	
->>>>>>> 1f4cfcc07cdb848af963f5514f2242dec816b6b4
+
+		public Boolean evaluateComplex (ref Hashtable symbolTable,TextView consoleText, String key, String expression) {
+			//Expression is yung natira from I HAS A
+			char[] splitToken = {' '};
+			String[] words = expression.Split (splitToken);
+			if (words.Length == 1) {
+				//Check if word[0] valid number.
+				if (validNumber (words [0])) {
+					symbolTable [key] = words [0];
+					return true;
+				//Check if word[0] is a valid variable identifier
+				} else if (Regex.IsMatch(expression, @"^\s*[a-zA-Z][a-zA-z\d]*\s*") && isValidVarident (words [0])) {
+					if (symbolTable.ContainsKey (expression)) {
+						symbolTable [key] = symbolTable [expression];
+						return true;
+					} else {
+						consoleText.Buffer.Text += "Error: undeclared variable!\n";
+						return false;
+					}
+				// Check if word[0] is a valid string
+				} else if(Regex.IsMatch(expression, @"^\s*"".*""")) {
+					symbolTable [key] = words [0];
+					return true;
+				}
+				// else check if valid variable.
+				// else check if valid string
+			}
+
+
+
+			return false;
+		}
+
+		public Boolean validNumber(String number) {
+			Match m =  Regex.Match (number, @"^\-?\d*\.?\d+\s*");
+			return m.Success;
+		}
 		/*
 		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez, Gtk.ListStore lexmodelz) {
 			this.lexModel = lexmodelz;
