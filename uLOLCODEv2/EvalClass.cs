@@ -3,6 +3,8 @@ using Gtk;
 using uLOLCODEv2;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace uLOLCODEv2
 {
@@ -292,6 +294,7 @@ namespace uLOLCODEv2
 
 		public Boolean evaluateComplex (ref Hashtable symbolTable,TextView consoleText, String key, String expression) {
 			//Expression is yung natira from I HAS A
+			Match m;
 			char[] splitToken = {' '};
 			String[] words = expression.Split (splitToken);
 			if (words.Length == 1) {
@@ -308,19 +311,62 @@ namespace uLOLCODEv2
 						consoleText.Buffer.Text += "Error: undeclared variable!\n";
 						return false;
 					}
-				// Check if word[0] is a valid string
-				} else if(Regex.IsMatch(expression, @"^\s*"".*""")) {
-					symbolTable [key] = words [0];
-					return true;
-				}
-				// else check if valid variable.
-				// else check if valid string
+				} 
+			}
+
+			// Check if string assignment
+			m = Regex.Match(expression, @"^\s*""(\d|\w|\s)*""$");
+			if(m.Success) {
+				symbolTable [key] = m.Value;
+				return true;
+			}
+
+			// Check if arithmetic operation
+			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)");
+			if(m.Success) {
+				var x = evalComplexArithmetic(expression, consoleText);
+				// x = 32;
+				symbolTable [key] = x;
+				return true;
 			}
 
 
-
+			consoleText.Buffer.Text += "Error: Invalid assignment!\n";
 			return false;
 		}
+
+
+		public int evalComplexArithmetic (String expression, TextView consoleText) {			
+			String splitToken = "[ ]";
+			String[] temp = Regex.Split (expression, splitToken);
+			List<String> operations = new List<String>();
+			Stack stack;
+			int runs = 0;
+			for(var i = 0; i < temp.Length ; i++) {
+				temp[i] = temp[i].Trim();
+				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
+					// consoleText.Buffer.Text += temp[i] + '\n';
+					operations.Add(temp[i]);
+				}
+			}
+
+			// Solving the postfix expression
+			for(int i = operations.Count-1 ; i >= 0 ; i--) {
+				// consoleText.Buffer.Text += operations[i] + '\n';
+				int n;
+				Boolean isNumeric = int.TryParse(operations[i], out n);
+				if(isNumeric) {
+					stack.push(n);
+				} else if (operations[i].Equals("SUM")) {
+					stack.push(stack.pop() + stack.pop());
+				}
+			}
+
+			return stack.pop();
+			//while 
+
+		}
+
 
 		public Boolean validNumber(String number) {
 			Match m =  Regex.Match (number, @"^\-?\d*\.?\d+\s*");
