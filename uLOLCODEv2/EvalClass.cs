@@ -327,6 +327,8 @@ namespace uLOLCODEv2
 				return true;
 			}
 
+			// Check if boolean expression
+
 
 			consoleText.Buffer.Text += "Error: Invalid assignment!\n";
 			return false;
@@ -390,9 +392,12 @@ namespace uLOLCODEv2
 					var b = stack.Pop ();
 					// consoleText.Buffer.Text += (a+b) + '\n';
 					stack.Push((a > b) ? b : a);
+				} else {
+					// May error. Consult Mon how to handle.
+					break;
 				}
 			}
-			
+
 			var res = stack.Pop();
 			consoleText.Buffer.Text += res + "";
 			return res;

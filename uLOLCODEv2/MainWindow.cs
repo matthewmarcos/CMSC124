@@ -99,6 +99,14 @@ public partial class MainWindow: Gtk.Window
 		//parseLines(code);
 	}
 
+
+
+	/*
+		TO-DO:
+			separate getting of lexemes only. NO SYMBOL TABLE
+			2nd run: Initialize IT into symbol table ^ w/o appendValues
+
+	*/
 	public void parseLines (String line,ref Boolean isComment, int lineNumber) {
 		lineNumber += 1;
 		Match m;
@@ -192,6 +200,7 @@ public partial class MainWindow: Gtk.Window
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
 				lexModel.AppendValues (matchedString, "Addition Op");
+				// evaluateComplex(ref symbolTable, consoleText, "IT", line);
 				continue;
 			}
 
