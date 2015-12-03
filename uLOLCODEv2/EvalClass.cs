@@ -1,7 +1,6 @@
 ﻿using System;
 using Gtk;
 using uLOLCODEv2;
-using System.Collections;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
@@ -324,9 +323,7 @@ namespace uLOLCODEv2
 			// Check if arithmetic operation
 			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)");
 			if(m.Success) {
-				var x = evalComplexArithmetic(expression, consoleText);
-				// x = 32;
-				symbolTable [key] = x;
+				symbolTable [key] = evalComplexArithmetic(expression, consoleText).ToString();
 				return true;
 			}
 
@@ -340,30 +337,61 @@ namespace uLOLCODEv2
 			String splitToken = "[ ]";
 			String[] temp = Regex.Split (expression, splitToken);
 			List<String> operations = new List<String>();
-			Stack stack;
-			int runs = 0;
+			var stack = new Stack<int> ();
+		
 			for(var i = 0; i < temp.Length ; i++) {
 				temp[i] = temp[i].Trim();
 				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
-					// consoleText.Buffer.Text += temp[i] + '\n';
 					operations.Add(temp[i]);
 				}
-			}
-
-			// Solving the postfix expression
+			}         
+            // Solving the postfix expression
 			for(int i = operations.Count-1 ; i >= 0 ; i--) {
-				// consoleText.Buffer.Text += operations[i] + '\n';
-				int n;
-				Boolean isNumeric = int.TryParse(operations[i], out n);
+				int number;
+				Boolean isNumeric = int.TryParse(operations[i], out number);
 				if(isNumeric) {
-					stack.push(n);
+					stack.Push(number);
 				} else if (operations[i].Equals("SUM")) {
-					stack.push(stack.pop() + stack.pop());
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a + b);
+				} else if (operations[i].Equals("DIFF")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a - b);
+				} else if (operations[i].Equals("PRODUKT")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a * b);
+				} else if (operations[i].Equals("QUOSHUNT")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a / b);
+				} else if (operations[i].Equals("MOD")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a % b);
+				} else if (operations[i].Equals("BIGGR")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push((a > b) ? a : b);
+				} else if (operations[i].Equals("SMALLR")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push((a > b) ? b : a);
 				}
 			}
+			var res = stack.Pop();
+			consoleText.Buffer.Text += res + "";
 
-			return stack.pop();
-			//while 
+			return res;
 
 		}
 
