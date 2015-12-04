@@ -14,10 +14,11 @@ public partial class MainWindow: Gtk.Window
 	public static Gtk.ListStore lexModel = new Gtk.ListStore(typeof(string),typeof(string));
 	public static Gtk.ListStore symbolTree = new Gtk.ListStore(typeof(string),typeof(string));
 	public static Hashtable symbolTable = new Hashtable ();
-	Identifier ident = new Identifier();
+//	Identifier ident = new Identifier();
 	EvalClass eval = new EvalClass ();
 	LexerClass lexer = new LexerClass();
 	ParserClass parser = new ParserClass ();
+	TestClass test = new TestClass();
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{	
@@ -93,6 +94,8 @@ public partial class MainWindow: Gtk.Window
 		if(!eval.hasValidStartAndEnd(lines)) {
 			consoleText.Buffer.Text += "Syntax Error at program delimiter\n";
 		} 
+
+		consoleText.Buffer.Text += "ComplexEvaluator says: " + test.HelloReturner() + "\n";
 
 		for(var i = 0 ; i < lines.Length ; i++) {
 			lexer.parseLines(lines[i], ref isComment, i, ref lexModel, ref symbolTree, consoleText);

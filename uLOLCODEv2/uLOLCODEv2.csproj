@@ -74,6 +74,7 @@
     <Compile Include="EvalClass.cs" />
     <Compile Include="LexerClass.cs" />
     <Compile Include="ParserClass.cs" />
+    <Compile Include="TestClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

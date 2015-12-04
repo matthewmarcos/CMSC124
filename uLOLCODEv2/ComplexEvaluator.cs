@@ -11,6 +11,10 @@ namespace uLOLCODEv2
 		public ComplexEvaluator ()
 		{
 		}
+
+		public String HelloReturner() {
+			return "Hello World!";
+		}
 		
 	}
 }
