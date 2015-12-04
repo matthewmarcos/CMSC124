@@ -72,6 +72,7 @@
     <Compile Include="EmptyClass.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="EvalClass.cs" />
+    <Compile Include="LexerClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

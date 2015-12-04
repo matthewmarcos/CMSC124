@@ -314,7 +314,7 @@ namespace uLOLCODEv2
 			}
 
 			// Check if string assignment
-			m = Regex.Match(expression, @"^\s*""(\d|\w|\s)*""$");
+			m = Regex.Match(expression, @"^\s*"".*""$");
 			if(m.Success) {
 				symbolTable [key] = m.Value;
 				return true;
