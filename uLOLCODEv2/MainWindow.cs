@@ -17,6 +17,7 @@ public partial class MainWindow: Gtk.Window
 	Identifier ident = new Identifier();
 	EvalClass eval = new EvalClass ();
 	LexerClass lexer = new LexerClass();
+	ParserClass parser = new ParserClass ();
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{	
@@ -97,7 +98,10 @@ public partial class MainWindow: Gtk.Window
 			lexer.parseLines(lines[i], ref isComment, i, ref lexModel, ref symbolTree, consoleText);
 		}
 
-		//parseLines(code);
+		for(var i = 0 ; i < lines.Length ; i++) {
+			parser.parseLines(lines[i], ref isComment, i, ref symbolTable, ref symbolTree, consoleText);
+		}
+
 	}
 
 
