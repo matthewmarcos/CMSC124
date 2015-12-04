@@ -9,6 +9,7 @@ namespace uLOLCODEv2
 {
 	public class ParserClass
 	{
+		EvalClass eval = new EvalClass ();
 		public ParserClass ()
 		{
 		}
@@ -20,7 +21,7 @@ namespace uLOLCODEv2
 
 			while (line.Length != 0) {
 				//consoleText.Buffer.Text += ("Value of Flag: " + isComment + "\n");
-				//updateSymbolTable ();
+				updateSymbolTable (ref symbolTable, ref symbolTree);
 				if(isComment) {
 					m = Regex.Match (line, @"^TLDR$");
 					if (m.Success) {
@@ -78,7 +79,7 @@ namespace uLOLCODEv2
 					matchedString = matchedString.Trim ();
 			//		lexModel.AppendValues (matchedString, "Var Declaration");
 
-					//	eval.varDecEval (line, symbolTable, consoleText, lineNumber);
+					eval.varDecEval (line, symbolTable, consoleText, lineNumber);
 					continue;
 				}
 
@@ -456,6 +457,13 @@ namespace uLOLCODEv2
 
 
 			} //End of main loop
+		}
+
+		protected void updateSymbolTable(ref Hashtable symbolTable, ref Gtk.ListStore symbolTree) {
+			symbolTree.Clear ();
+			foreach(DictionaryEntry pair in symbolTable) {
+				symbolTree.AppendValues (pair.Key, pair.Value);
+			}
 		}
 	}
 }
