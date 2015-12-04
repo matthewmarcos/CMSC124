@@ -163,8 +163,9 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexBoolean(line, consoleText, symbolTable).ToString();
+					it = eval.evalComplexBoolean(line, consoleText, symbolTable);
 				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
 		//		lexModel.AppendValues (matchedString, "AND Op");
 				
 			}
@@ -174,8 +175,9 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexBoolean(line, consoleText, symbolTable).ToString();
+					it = eval.evalComplexBoolean(line, consoleText, symbolTable);
 				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
 				
 			}
 
@@ -184,8 +186,9 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexBoolean(line, consoleText, symbolTable).ToString();
+					it = eval.evalComplexBoolean(line, consoleText, symbolTable);
 				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
 				
 			}
 
@@ -246,16 +249,13 @@ namespace uLOLCODEv2
 				matchedString = matchedString.Trim ();
 		//		lexModel.AppendValues (matchedString, "Print Op");
 
-				//	eval.evalVisible (line, symbolTable, consoleText, lineNumber);
+				// eval.evalVisible (line, symbolTable, consoleText, lineNumber);
 				
 			}
 
 			m = Regex.Match (line, @"^\s*GIMMEH\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-				
+							
 			}
 
 			m = Regex.Match (line, @"^\s*O\s+RLY\?\s*$");
