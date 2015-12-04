@@ -160,100 +160,73 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*BOTH\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
+				line = line.Trim ();
+				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexBoolean(line, consoleText, symbolTable).ToString();
+				}
 		//		lexModel.AppendValues (matchedString, "AND Op");
 				
 			}
 
 			m = Regex.Match (line, @"^\s*EITHER\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "OR Op");
+				line = line.Trim ();
+				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexBoolean(line, consoleText, symbolTable).ToString();
+				}
 				
 			}
 
 			m = Regex.Match (line, @"^\s*WON\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "XOR Op");
+				line = line.Trim ();
+				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexBoolean(line, consoleText, symbolTable).ToString();
+				}
 				
 			}
 
 			m = Regex.Match (line, @"^\s*NOT\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Negation Op");
-				
+								
 			}
 
 			m = Regex.Match (line, @"^\s*ALL\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Infinite Arity AND");
 				
 			}
 
 			m = Regex.Match (line, @"^\s*ANY\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Infinite Arity OR");
-				
+								
 			}
 
 			m = Regex.Match (line, @"^\s*BOTH\s+SAEM\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Equality Op");
 				
 			}
 
 			m = Regex.Match (line, @"^\s*DIFFRINT\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Inequality Op");
-				
+								
 			}
 
 			m = Regex.Match (line, @"^\s*SMOOSH\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "String Concat Op");
+				consoleText.Buffer.Text += "Nope!\n";
 				
 			}
 
 			m = Regex.Match (line, @"^\s*MAEK\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Casting Op");
-				
+								
 			}
 
 			m = Regex.Match (line, @"^A\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Linking Op");
 				
 			}
 
@@ -408,18 +381,14 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\-?\d*\.\d+\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
+				return;
 		//		lexModel.AppendValues (matchedString, "Numbar Literal");
 				
 			}
 
 			m = Regex.Match (line, @"^\-?\d+\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
+				return;
 		//		lexModel.AppendValues (matchedString, "Numbr Literal");
 				
 			}		
