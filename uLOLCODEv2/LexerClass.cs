@@ -254,6 +254,24 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+				m = Regex.Match (line, @"^\s*WIN\s*");
+				if (m.Success) {
+					line = line.Remove (0, m.Value.Length);
+					matchedString = m.Value;
+					matchedString = matchedString.Trim ();
+					lexModel.AppendValues (matchedString, "Equivalent to TRUE");
+					continue;
+				}
+
+				m = Regex.Match (line, @"^\s*FAIL\s*");
+				if (m.Success) {
+					line = line.Remove (0, m.Value.Length);
+					matchedString = m.Value;
+					matchedString = matchedString.Trim ();
+					lexModel.AppendValues (matchedString, "Equivalent to FALSE");
+					continue;
+				}
+
 				m = Regex.Match (line, @"^\s*MAEK\s*");
 				if (m.Success) {
 					line = line.Remove (0, m.Value.Length);

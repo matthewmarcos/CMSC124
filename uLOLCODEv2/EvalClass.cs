@@ -41,6 +41,14 @@ namespace uLOLCODEv2
 				"YR",
 				"TIL",
 				"WILE",
+				"TROOF",
+				"YARN",
+				"NUMBR",
+				"NUMBAR",
+				"NOOB",
+				"WIN",
+				"FAIL",
+				"IT"
 			};
 			foreach(var pattern in patterns) {
 				if(pattern.Equals(variable)) {
@@ -79,7 +87,10 @@ namespace uLOLCODEv2
 						expression = Regex.Split(lines, @"\s+ITZ\s+");
 						//Evaluate the expression[1] if expression is a string,
 						// or complexExpression that is valid. Already evaluate it lang. plz.
-						evaluateComplex(ref symbolTable, consoleText, expression[0], expression[1]);
+						if(!evaluateComplex(ref symbolTable, consoleText, expression[0], expression[1])) {
+							consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
+							": variable " + expression[1] + " is invalid!\n";
+						}
 //						symbolTable.Add(expression[0], expression[1]);
 						return;
 					} else {
@@ -321,19 +332,175 @@ namespace uLOLCODEv2
 			}
 
 			// Check if arithmetic operation
-			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)");
+			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)\s*");
 			if(m.Success) {
-				symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
-				return true;
+				//Check if complexArithmetic is valid or not
+				if(isValidComplexArithmetic(expression, consoleText, symbolTable)) {
+					symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
+					return true;
+				} else {
+					return false;
+				}
 			}
 
 			// Check if boolean expression
+			m = Regex.Match(expression, @"^\s*(BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
+			if(m.Success) {
+				
+				//Check if complexArithmetic is valid or not
+				if(isValidComplexBoolean(expression, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += "Valid boolean \n";
+					symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
+					return true;
 
+				} else {
+					return false;
+				}
+			}
 
 			consoleText.Buffer.Text += "Error: Invalid assignment!\n";
 			return false;
 		}
 
+		public String evalComplexBoolean (String expression, TextView consoleText, Hashtable symbolTable) {			
+			String splitToken = "[ ]";
+			String[] temp = Regex.Split (expression, splitToken);
+			List<String> operations = new List<String>();
+			var stack = new Stack<Boolean> ();
+		
+			for(var i = 0; i < temp.Length ; i++) {
+				temp[i] = temp[i].Trim();
+				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
+					operations.Add(temp[i]);
+				}
+			}         
+            // Solving the postfix expression
+			for(int i = operations.Count-1 ; i >= 0 ; i--) {
+				
+				if(Regex.IsMatch(operations[i], @"^WIN$")) {
+					stack.Push(true);
+				} else if (Regex.IsMatch(operations[i],@"^FAIL$")) {
+					// If variable that exists in table
+					stack.Push(false);
+				} else if (Regex.IsMatch(operations[i], @"^[a-zA-Z][a-zA-z\d]*") && 
+					symbolTable.ContainsKey(operations[i])) {
+					// If variable that exists in table
+					var myValue = (String)symbolTable[operations[i]];
+					if(myValue.Equals("WIN")) {
+						stack.Push(true);						
+					} else if(myValue.Equals("FAIL")){
+						stack.Push(false);
+					}
+				} else if (operations[i].Equals("BOTH")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a && b);
+				} else if (operations[i].Equals("EITHER")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push(a || b);
+				} else if (operations[i].Equals("WON")) {
+					var a = stack.Pop ();
+					var b = stack.Pop ();
+					// consoleText.Buffer.Text += (a+b) + '\n';
+					stack.Push((a || b) && !(a && b));
+				} else {
+					// May error. Consult Mon how to handle.
+					break;
+				}
+			}
+			
+
+			if(stack.Pop()) {
+				return "WIN";
+			} else {
+				return "FAIL";
+			}
+
+			return "WIN";
+		} 
+
+
+		// Check for underflows and overflows
+		public Boolean isValidComplexBoolean(String expression, TextView consoleText, Hashtable symbolTable) {
+			var operators = 0;
+			var operands = 0;
+			while(expression != "") {
+				Match m = Regex.Match(expression, @"^\s*(BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*)");
+				if(m.Success) {
+					expression = expression.Remove(0, m.Value.Length);
+					expression = expression.Trim();
+					operators+=1;
+					continue;
+				}
+
+				m = Regex.Match(expression, @"^\s*(WIN\s*|FAIL\s*)\s*");
+				if(m.Success) {
+					expression = expression.Remove(0, m.Value.Length);
+					expression = expression.Trim();
+					operands+=1;
+					continue;
+				}
+
+				//disregard AN
+				m = Regex.Match(expression, @"^\s*AN\s*");
+				if(m.Success) {
+					expression = expression.Remove(0, m.Value.Length);
+					expression = expression.Trim();
+					continue;
+				}
+
+				m = Regex.Match(expression, @"^[a-zA-Z][a-zA-z\d]*");
+				if(m.Success) {
+					expression = expression.Remove(0, m.Value.Length);
+					expression = expression.Trim();
+					operands+=1;
+					continue;
+				}
+			}	
+
+			if(operands - 1 == operators) {
+				return true;
+			} else {
+				return false;	
+			}
+		}
+
+		public Boolean isValidComplexArithmetic(String expression, TextView consoleText, Hashtable symbolTable) {
+			String splitToken = "[ ]";
+			String[] temp = Regex.Split (expression, splitToken);
+			List<String> operations = new List<String>();
+
+			var operators = 0;
+			var operands = 0;
+			for(var i = 0; i < temp.Length ; i++) {
+				temp[i] = temp[i].Trim();
+				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
+					operations.Add(temp[i]);
+				}
+			}  
+
+			foreach(String operation in operations) {
+				if(operation.Equals("DIFF") ||
+					operation.Equals("SUM") ||
+					operation.Equals("PRODUKT") ||
+					operation.Equals("QUOSHUNT") ||
+					operation.Equals("MOD") ||
+					operation.Equals("BIGGR") ||
+					operation.Equals("SMALLR")) {
+					operators++;
+				} else {
+					operands++;
+				}
+			}
+			if(operands - 1 == operators) {
+				return true;
+			} else {
+				return false;	
+			}
+		}
 
 		public int evalComplexArithmetic (String expression, TextView consoleText, Hashtable symbolTable) {			
 			String splitToken = "[ ]";
@@ -353,7 +520,7 @@ namespace uLOLCODEv2
 				Boolean isNumeric = int.TryParse(operations[i], out number);
 				if(isNumeric) {
 					stack.Push(number);
-				} else if (Regex.IsMatch(operations[i], @"[a-zA-Z][a-zA-z\d]*") && 
+				} else if (Regex.IsMatch(operations[i], @"^[a-zA-Z][a-zA-z\d]*") && 
 					symbolTable.ContainsKey(operations[i])) {
 					// If variable that exists in table
 					stack.Push(Int32.Parse((String)symbolTable[operations[i]]));
@@ -376,6 +543,7 @@ namespace uLOLCODEv2
 					var a = stack.Pop ();
 					var b = stack.Pop ();
 					// consoleText.Buffer.Text += (a+b) + '\n';
+					// if b == 0, exit
 					stack.Push(a / b);
 				} else if (operations[i].Equals("MOD")) {
 					var a = stack.Pop ();
@@ -399,7 +567,8 @@ namespace uLOLCODEv2
 			}
 
 			var res = stack.Pop();
-			consoleText.Buffer.Text += res + "";
+			// consoleText.Buffer.Text += res + "";
+
 			return res;
 
 		}
