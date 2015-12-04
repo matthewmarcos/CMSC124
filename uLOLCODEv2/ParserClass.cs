@@ -18,6 +18,7 @@ namespace uLOLCODEv2
 			lineNumber += 1;
 			Match m;
 			String matchedString;
+			String it = "";
 
 			//consoleText.Buffer.Text += ("Value of Flag: " + isComment + "\n");
 			updateSymbolTable (ref symbolTable, ref symbolTree);
@@ -31,15 +32,6 @@ namespace uLOLCODEv2
 		//		lexModel.AppendValues (line, "Multi Line Comment");
 				
 			}
-
-			m = Regex.Match (line, @"^HAI\s*$");
-			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Start of Program");
-				
-			} 
 
 			m = Regex.Match (line, @"^KTHXBYE$");
 			if (m.Success) {
@@ -81,88 +73,88 @@ namespace uLOLCODEv2
 				eval.varDecEval (line, symbolTable, consoleText, lineNumber);
 
 				return;
-				
-			}
 
-			m = Regex.Match (line, @"^\s*ITZ\s*");
-			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Var Initializer");
-				
-			}
-
-			m = Regex.Match (line, @"^\s*R\s*");
-			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Var Assignment");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*SUM\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Addition Op");
-				// evaluateComplex(ref symbolTable, consoleText, "IT", line);
-				
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;
 			}
 
 			m = Regex.Match (line, @"^\s*DIFF\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Subtraction Op");
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;
 				
 			}
 
 			m = Regex.Match (line, @"^\s*PRODUKT\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Multiplication Op");
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;
 				
 			}
 
 			m = Regex.Match (line, @"^\s*QUOSHUNT\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Division Op");
-				
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;				
 			}
 
 			m = Regex.Match (line, @"^\s*MOD\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Modulo Op");
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;
 				
 			}
 
 			m = Regex.Match (line, @"^\s*BIGGR\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Max Value Op");
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;
 				
 			}
 
 			m = Regex.Match (line, @"^\s*SMALLR\s+OF\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Min Value Op");
+				line = line.Trim ();
+				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
+					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+				return;
 				
 			}
 
@@ -217,15 +209,6 @@ namespace uLOLCODEv2
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
 		//		lexModel.AppendValues (matchedString, "Infinite Arity OR");
-				
-			}
-
-			m = Regex.Match (line, @"^\s*AN\s*");
-			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Linking Op");
 				
 			}
 
@@ -299,8 +282,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Scan Op");
-				//	eval.evalGimmeh (line, symbolTable,consoleText,lineNumber,symbolTree);
 				
 			}
 
@@ -388,10 +369,19 @@ namespace uLOLCODEv2
 			m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s+R\s+");
 			if (m.Success) {
 				// VAR R...
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
+				String varident = m.Value;
+				m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*");
+				String variable = m.Value;
+				variable = variable.Trim();
+				line = line.Remove(0, varident.Length);
 
+				if (eval.isValidVarident(variable)) {
+					// consoleText.Buffer.Text += "Variable: " + variable + "\n";
+					// consoleText.Buffer.Text += "Line: " + line + "\n";
+					eval.varAssignEval (variable, line, ref symbolTable, consoleText, lineNumber);
+				}
+				
+				// evalVarR(sdgviudsv)
 				
 			}
 

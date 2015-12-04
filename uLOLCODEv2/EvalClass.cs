@@ -58,6 +58,23 @@ namespace uLOLCODEv2
 			return true;
 		}
 
+		public Boolean varAssignEval(String variable, String lines, ref Hashtable symbolTable, TextView consoleText, int lineNumber) {
+
+			// Check if variable is in symbol Table
+			if(!symbolTable.ContainsKey(variable)) {
+				consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + ": " + variable + " not declared!\n";
+				return false;
+			} else {
+				if(!evaluateComplex(ref symbolTable, consoleText, variable, lines)) {
+					consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
+					": variable " + lines + " is invalid!\n";
+					return false;
+				}
+				return true;
+			}
+
+		}
+
 		public void varDecEval(String lines, Hashtable symbolTable, TextView consoleText, int lineNumber) {
 			Match m;
 			char[] splitToken = {' '};
