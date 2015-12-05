@@ -50,9 +50,6 @@ namespace uLOLCODEv2
 					int number;
 					Boolean isNumeric = int.TryParse(myValue, out number);
 
-					consoleText.Buffer.Text += "myValue: " + myValue + "\n";
-					consoleText.Buffer.Text += "number: " + number + "\n";
-					consoleText.Buffer.Text += "isNumeric: " + isNumeric + "\n";
 					//stack.Push (5);
 
 					m = Regex.Match (myValue, @"\s*"".*""$");
@@ -65,9 +62,7 @@ namespace uLOLCODEv2
 						stack.Push (false);
 					} else if (m.Success) { //Yarn 
 						stack.Push (m.Value);
-					} else {
-						//Int32.Parse((String)symbolTable[operations[i]])
-					}
+					} 
 
 					continue;
 				}

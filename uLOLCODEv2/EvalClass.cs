@@ -335,7 +335,16 @@ namespace uLOLCODEv2
 				if (validNumber (words [0])) {
 					symbolTable [key] = words [0];
 					return true;
-				//Check if word[0] is a valid variable identifier
+				//Check if word[0] is a valid Boolean
+				} else if (words[0].Equals("WIN") || words[0].Equals("FAIL")) {
+					if (words [0].Equals ("WIN")) {
+						symbolTable [key] = "WIN";
+						return true;
+					} else {
+						symbolTable [key] = "FAIL";
+						return true;
+					}
+				//Check if word[0] is a valid Variable
 				} else if (Regex.IsMatch(expression, @"^\s*[a-zA-Z][a-zA-z\d]*\s*") && isValidVarident (words [0])) {
 					if (symbolTable.ContainsKey (expression)) {
 						symbolTable [key] = symbolTable [expression];
