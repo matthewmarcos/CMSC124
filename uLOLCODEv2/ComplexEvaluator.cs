@@ -221,10 +221,23 @@ namespace uLOLCODEv2
 					expression = expression.Trim ();
 					var a = (String)stack.Pop ();
 					var b = (String)stack.Pop ();
-					a = removeQuotes (a);
-					b = removeQuotes (b);
-					consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
-					stack.Push ('"' + a + b + '"');
+
+					//String literal
+					if (Regex.IsMatch (a, @"\s*"".*""$")) {
+						a = removeQuotes (a);
+					}
+
+					//String literal
+					if (Regex.IsMatch (b, @"\s*"".*""$")) {
+						b = removeQuotes (b);
+					}
+
+					//Number
+					//if (Regex.IsMatch (b,  @"\-?\d+\s*$")) {
+					//}
+									
+					//consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
+					stack.Push ("\"" + a + b + "\"");
 					continue;
 				}
 
