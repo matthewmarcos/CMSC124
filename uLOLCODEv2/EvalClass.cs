@@ -258,7 +258,10 @@ namespace uLOLCODEv2
 					//DECLARE AN INSTANCE OF Inputtr;
 					box.Run ();
 					//get the input from the dialog box, passed to "inputVALUE"  of type global static string
-					symbolTable [line] = inputVALUE;
+					//symbolTable [line] = inputVALUE;
+
+					evalINPUT (line,inputVALUE,symbolTable);
+
 					//Append it to the "console"
 					consoleText.Buffer.Text += inputVALUE+"\n";
 					//update the symbolTable after input.
@@ -574,6 +577,25 @@ namespace uLOLCODEv2
 		public Boolean validNumber(String number) {
 			Match m =  Regex.Match (number, @"^\-?\d*\.?\d+\s*");
 			return m.Success;
+		}
+
+		public void evalINPUT (String variable, String value, Hashtable symbolTable){
+			//EVALUATE THE GIVEN VALUE;
+			// IF NUMBAR,NUMBR,STRING
+			Match m = Regex.Match (value, @"^\-?\d*\.\d+\s*");
+			if (m.Success) {
+				symbolTable[variable]=value;
+				return;
+			}
+
+			 m = Regex.Match (value, @"^\-?\d+\s*");
+			if (m.Success) {
+				symbolTable[variable]=value;
+				return;
+			}
+
+			symbolTable[variable] = "\"" + value + "\"";
+
 		}
 		/*
 		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez, Gtk.ListStore lexmodelz) {
