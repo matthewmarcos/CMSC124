@@ -22,7 +22,12 @@ namespace uLOLCODEv2
 			String expression = exp;
 			Stack stack = new Stack ();
 			//Boolean[,] isInfiniteArity;
-			int mkTier = 0;
+			int[] mkTier;
+			mkTier = new int [225];
+			int currTier = 0;
+			for (int i = 0; i < 225; i++) {
+				mkTier [i] = 0;
+			}
 			Boolean infiniteArity = false;
 			//consoleText.Buffer.Text += expression + "\n";
 
@@ -73,8 +78,8 @@ namespace uLOLCODEv2
 						stack.Push (m.Value);
 					} 
 
-					if (infiniteArity) {
-						mkTier++;
+					if (currTier > 0) {
+						mkTier[currTier]++;
 					}
 					continue;
 				}
@@ -85,8 +90,8 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (m.Value);
-					if (infiniteArity) {
-						mkTier++;
+					if (currTier > 0) {
+						mkTier[currTier]++;
 					}
 
 					continue;
@@ -98,8 +103,8 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (Int32.Parse(m.Value));
-					if (infiniteArity) {
-						mkTier++;
+					if (currTier > 0) {
+						mkTier[currTier]++;
 					}
 					continue;
 				}
@@ -120,8 +125,8 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a + b);
-					if (infiniteArity) {
-						mkTier--;
+					if (currTier > 0) {
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -133,8 +138,8 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a - b);
-					if (infiniteArity) {
-						mkTier++;
+					if (currTier > 0) {
+						mkTier[currTier]++;
 					}
 					continue;
 				}
@@ -146,8 +151,8 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a * b);
-					if (infiniteArity) {
-						mkTier--;
+					if (currTier > 0) {
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -162,8 +167,8 @@ namespace uLOLCODEv2
 						return "UNDEFINED";
 					}
 					stack.Push (a / b);
-					if (infiniteArity) {
-						mkTier--;
+					if (currTier > 0) {
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -178,8 +183,8 @@ namespace uLOLCODEv2
 						return "UNDEFINED";
 					}
 					stack.Push (a % b);
-					if (infiniteArity) {
-						mkTier--;
+					if (currTier > 0) {
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -192,8 +197,8 @@ namespace uLOLCODEv2
 					var b = (int)stack.Pop ();
 
 					stack.Push ((a > b) ? a : b);
-					if (infiniteArity) {
-						mkTier--;
+					if (currTier > 0) {
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -206,8 +211,8 @@ namespace uLOLCODEv2
 					var b = (int)stack.Pop ();
 
 					stack.Push ((a > b) ? b : a);
-					if (infiniteArity) {
-						mkTier--;
+					if (currTier > 0) {
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -288,7 +293,7 @@ namespace uLOLCODEv2
 
 				m = Regex.Match (expression, @"SMOOSH$");
 				if (m.Success) {
-					if (!infiniteArity) {
+					if (currTier <= 0) {
 						return "UNDEFINED";
 					}
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -300,7 +305,7 @@ namespace uLOLCODEv2
 
 
 
-					for (var i = 0; i < mkTier; i++) {
+					for (var i = 0; i < mkTier[currTier]; i++) {
 						var a = stack.Pop().ToString();
 
 						if (Regex.IsMatch (a, @"\s*"".*""$")) {
@@ -309,20 +314,20 @@ namespace uLOLCODEv2
 						strings.Add (a);
 					}
 
-					for (var i = 0; i < mkTier ; i++) {
+					for (var i = 0; i < mkTier[currTier] ; i++) {
 						tempString += strings [i];
 					}
 					stack.Push ("\"" + tempString + "\"");
-					continue;
-
-
+					//continue;
+					currTier--;
+					continue; 
 				}
 
 				m = Regex.Match (expression, @"MKAY$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					infiniteArity = true;
+					currTier++;
 					continue;
 				}
 
