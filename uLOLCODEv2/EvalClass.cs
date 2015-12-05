@@ -50,7 +50,8 @@ namespace uLOLCODEv2
 				"NOOB",
 				"WIN",
 				"FAIL",
-				"IT"
+				"IT",
+				"MKAY"
 			};
 			foreach(var pattern in patterns) {
 				if(pattern.Equals(variable)) {
@@ -217,7 +218,7 @@ namespace uLOLCODEv2
 				//===============End of Number Literal==============//
 				//===============Expression=========================//
 			m = Regex.Match(line, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
-			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
+			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*|DIFFRINT)\s*");
 			if(m.Success) {
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexArithmetic(line, consoleText, symbolTable)) {
@@ -328,9 +329,9 @@ namespace uLOLCODEv2
 			}
 
 			// Check if arithmetic, boolean, infinite arity operation.
-			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
-			BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM|ALL\s+OF)\s*");
+			m = Regex.Match(expression, @"^\s*(DIFFRINT\s*|SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM\s*|ALL\s+OF\s*)\s*");
 			if(m.Success) {
+				//consoleText.Buffer.Text += "Tascascasc\n";
 				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 				return true;
 			} 		
@@ -637,10 +638,10 @@ namespace uLOLCODEv2
 			 * */
 			//codes [lineNumber];	<=== current location of ORLY
 			Boolean paired = false;
-			for (; lineNumber<codes.Length; lineNumber++) {
-				Match m = Regex.Match (codes [lineNumber], @"^\s*OIC\s*$");
+			int i = lineNumber;
+			for (; i<codes.Length; i++) {
+				Match m = Regex.Match (codes [i], @"^\s*OIC\s*$");
 				if (m.Success) {
-					consoleText.Buffer.Text += "HEYHEYHEY\n";
 					paired = true;
 					break;
 				} else {
@@ -654,10 +655,16 @@ namespace uLOLCODEv2
 			if (!paired) {
 
 				consoleText.Buffer.Text += "Syntax Error: OIC expected\n";
+				return;
 			} else {
 
-				consoleText.Buffer.Text+= "OIC FOUND!\n";
+				evaluateConditions (codes,lineNumber,symbolTable,consoleText);
 			}
+
+
+		}
+
+		public void evaluateConditions(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
 
 
 		}

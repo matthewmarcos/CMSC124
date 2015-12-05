@@ -21,28 +21,39 @@ namespace uLOLCODEv2
 			Match m;
 			String expression = exp;
 			Stack stack = new Stack ();
-			Boolean[,] isInfiniteArity;
-
+			//Boolean[,] isInfiniteArity;
+			int[] mkTier;
+			mkTier = new int [225];
+			int currTier = 0;
+			for (int i = 0; i < 225; i++) {
+				mkTier [i] = 0;
+			}
+			Boolean infiniteArity = false;
 			//consoleText.Buffer.Text += expression + "\n";
 
-			while (!String.IsNullOrEmpty(expression)) {
-				//consoleText.Buffer.Text += expression + "\n";
+			while (!String.IsNullOrEmpty (expression)) {
+				
+				//Win literal
 				m = Regex.Match (expression, @"WIN$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (true);
+
 					continue;
 				}
 
+				//Fail literal
 				m = Regex.Match (expression, @"FAIL$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (false);
-					continue;
-				}
 
+					continue;
+				} 	
+
+				//varident
 				m = Regex.Match (expression, @"[a-zA-Z][a-zA-z\d]*$");
 				if (m.Success && symbolTable.ContainsKey(m.Value)) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -67,22 +78,34 @@ namespace uLOLCODEv2
 						stack.Push (m.Value);
 					} 
 
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				}
 
-				m = Regex.Match (expression, @"""([^""]*|)""$");
+				//String Literal
+				m = Regex.Match (expression, @"""([^""]*)""$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (m.Value);
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
+
 					continue;
 				}
 
+				//Number Literal
 				m = Regex.Match (expression, @"\-?\d+\s*$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (Int32.Parse(m.Value));
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				}
 
@@ -102,6 +125,9 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a + b);
+					if (currTier > 0) {
+						mkTier[currTier]--;
+					}
 					continue;
 				}
 
@@ -112,6 +138,9 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a - b);
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				}
 
@@ -122,6 +151,9 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a * b);
+					if (currTier > 0) {
+						mkTier[currTier]--;
+					}
 					continue;
 				}
 
@@ -132,9 +164,12 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					if (b == 0) {
-						return "UNDEFINED!";
+						return "UNDEFINED";
 					}
 					stack.Push (a / b);
+					if (currTier > 0) {
+						mkTier[currTier]--;
+					}
 					continue;
 				}
 
@@ -145,9 +180,12 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					if (b == 0) {
-						return "UNDEFINED!";
+						return "UNDEFINED";
 					}
 					stack.Push (a % b);
+					if (currTier > 0) {
+						mkTier[currTier]--;
+					}
 					continue;
 				}
 
@@ -159,6 +197,9 @@ namespace uLOLCODEv2
 					var b = (int)stack.Pop ();
 
 					stack.Push ((a > b) ? a : b);
+					if (currTier > 0) {
+						mkTier[currTier]--;
+					}
 					continue;
 				}
 
@@ -170,6 +211,9 @@ namespace uLOLCODEv2
 					var b = (int)stack.Pop ();
 
 					stack.Push ((a > b) ? b : a);
+					if (currTier > 0) {
+						mkTier[currTier]--;
+					}
 					continue;
 				}
 
@@ -182,14 +226,16 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"WON\s+OF\s+OF$");
+				m = Regex.Match (expression, @"WON\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					var a = (Boolean)stack.Pop ();
 					var b = (Boolean)stack.Pop ();
 
+					// (a || b) && (!a || !b)
 					stack.Push ((a || b) && !(a && b));
+
 					continue;
 				}
 
@@ -201,6 +247,7 @@ namespace uLOLCODEv2
 					var b = (Boolean)stack.Pop ();
 
 					stack.Push (a || b);
+
 					continue;
 				}
 
@@ -208,10 +255,11 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (Boolean)stack.Pop ();
-					var b = (Boolean)stack.Pop ();
+					var a = Convert.ToBoolean (stack.Pop ().ToString());
+					var b = Convert.ToBoolean (stack.Pop ().ToString());
 
 					stack.Push (a && b);
+
 					continue;
 				}
 
@@ -225,46 +273,65 @@ namespace uLOLCODEv2
 					var b = stack.Pop ().ToString();
 
 					stack.Push (a == b);
+
 					continue;
 				}
+
+				m = Regex.Match (expression, @"DIFFRINT$");
+				if (m.Success) {
+					consoleText.Buffer.Text += "Diffrint Detected\n";
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					stack.Push (a != b);
+
+					continue;
+				}
+
 
 				m = Regex.Match (expression, @"SMOOSH$");
 				if (m.Success) {
+					if (currTier <= 0) {
+						return "UNDEFINED";
+					}
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (String)stack.Pop ();
-					var b = (String)stack.Pop ();
 
-					//String literal
-					if (Regex.IsMatch (a, @"\s*"".*""$")) {
-						a = removeQuotes (a);
+					consoleText.Buffer.Text += "a\n";
+					List<String> strings = new List<String> ();
+					String tempString = "";
+
+
+
+					for (var i = 0; i < mkTier[currTier]; i++) {
+						var a = stack.Pop().ToString();
+
+						if (Regex.IsMatch (a, @"\s*"".*""$")) {
+							a = removeQuotes (a);
+						}
+						strings.Add (a);
 					}
 
-					//String literal
-					if (Regex.IsMatch (b, @"\s*"".*""$")) {
-						b = removeQuotes (b);
+					for (var i = 0; i < mkTier[currTier] ; i++) {
+						tempString += strings [i];
 					}
-
-					//Number
-					//if (Regex.IsMatch (b,  @"\-?\d+\s*$")) {
-					//}
-									
-					//consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
-					stack.Push ("\"" + a + b + "\"");
-					continue;
+					stack.Push ("\"" + tempString + "\"");
+					//continue;
+					currTier--;
+					continue; 
 				}
-
 
 				m = Regex.Match (expression, @"MKAY$");
 				if (m.Success) {
-					
-				
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					currTier++;
+					continue;
 				}
 
-			
-
-
-				break;
+				return "UNDEFINED2" + expression;
 			}
 
 			String result = stack.Pop ().ToString();
@@ -277,8 +344,6 @@ namespace uLOLCODEv2
 			}
 			//return stack.Pop ().ToString();
 		}
-
-
 	}
 }
 
