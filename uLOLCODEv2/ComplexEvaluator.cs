@@ -48,7 +48,12 @@ namespace uLOLCODEv2
 					//Pushing variables.
 					String myValue = symbolTable[m.Value].ToString();
 					int number;
-					Boolean isNumeric = int.TryParse(expression, out number);
+					Boolean isNumeric = int.TryParse(myValue, out number);
+
+					consoleText.Buffer.Text += "myValue: " + myValue + "\n";
+					consoleText.Buffer.Text += "number: " + number + "\n";
+					consoleText.Buffer.Text += "isNumeric: " + isNumeric + "\n";
+					//stack.Push (5);
 
 					m = Regex.Match (myValue, @"\s*"".*""$");
 
