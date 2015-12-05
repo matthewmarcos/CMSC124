@@ -161,6 +161,15 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+				m = Regex.Match (expression, @"NOT$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (Boolean)stack.Pop ();
+					stack.Push (!a);
+					continue;
+				}
+
 				m = Regex.Match (expression, @"WON\s+OF\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);

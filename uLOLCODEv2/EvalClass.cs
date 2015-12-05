@@ -374,7 +374,7 @@ namespace uLOLCODEv2
 				} else {
 					return false;
 				}
-			}
+			} 		
 
 			// Check if boolean expression
 			m = Regex.Match(expression, @"^\s*(BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
@@ -389,6 +389,14 @@ namespace uLOLCODEv2
 					return false;
 				}
 			}
+
+			m = Regex.Match(expression, @"^\s*NOT\s*");
+			if(m.Success) {
+				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				return true;
+			}
+
+
 
 			consoleText.Buffer.Text += "Error: Invalid assignment!\n";
 			return false;
