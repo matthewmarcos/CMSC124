@@ -254,6 +254,15 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+				m = Regex.Match (line, @"^\s*MKAY\s*");
+				if (m.Success) {
+					line = line.Remove (0, m.Value.Length);
+					matchedString = m.Value;
+					matchedString = matchedString.Trim ();
+					lexModel.AppendValues (matchedString, "End of Infinite Arity");
+					continue;
+				}
+
 				m = Regex.Match (line, @"^\s*WIN\s*");
 				if (m.Success) {
 					line = line.Remove (0, m.Value.Length);
