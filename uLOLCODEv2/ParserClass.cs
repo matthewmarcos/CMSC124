@@ -220,7 +220,7 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*SMOOSH\s*");
 			if (m.Success) {
-				consoleText.Buffer.Text += "Nope!\n";
+				//consoleText.Buffer.Text += "Nope!\n";
 				
 			}
 
@@ -231,7 +231,7 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^A\s*");
 			if (m.Success) {
-				
+
 			}
 
 			m = Regex.Match (line, @"^\s*IS\s+NOW\s+A\s*");
@@ -239,8 +239,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Casting Op");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*VISIBLE\s*");
@@ -248,9 +246,7 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Print Op");
-
-				 eval.evalVisible (line, symbolTable, consoleText, lineNumber);
+				eval.evalVisible (line, symbolTable, consoleText, lineNumber);
 				
 			}
 
@@ -258,7 +254,6 @@ namespace uLOLCODEv2
 			if (m.Success) {
 				line = line.Remove (0,m.Value.Length);
 				eval.evalGimmeh (line, symbolTable, consoleText, lineNumber, symbolTree);
-							
 			}
 
 			m = Regex.Match (line, @"^\s*O\s+RLY\?\s*$");
@@ -266,8 +261,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Start of If-Then");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*YA\s+RLY\s*");
@@ -275,8 +268,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Equivalent to IF");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*MEBBE\s*");
@@ -284,8 +275,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Equivalent to ELSEIF");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*NO\s+WAI\s*");
@@ -293,8 +282,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Equivalent to ELSE");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*OIC\s*$");
@@ -302,17 +289,13 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "End of Selection Statement");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*WTF\?\s*$");
 			if (m.Success) {
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Start of Switch");
-				
+				matchedString = matchedString.Trim ();	
 			}
 
 			m = Regex.Match (line, @"^\s*OMG\s*");
@@ -320,8 +303,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Case");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*GTFO\s*");
@@ -329,8 +310,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Break");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*OMGWTF\s*");
@@ -338,8 +317,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Default Case");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s+R\s+");
@@ -356,9 +333,6 @@ namespace uLOLCODEv2
 					// consoleText.Buffer.Text += "Line: " + line + "\n";
 					eval.varAssignEval (variable, line, ref symbolTable, consoleText, lineNumber);
 				}
-				
-				// evalVarR(sdgviudsv)
-				
 			}
 
 			m = Regex.Match (line, @"^\s*""");
@@ -376,27 +350,18 @@ namespace uLOLCODEv2
 				} else {
 					//ERROR -> unpaired quotation mark
 					consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "! (unpaired quotes)\n";
-					
 				}
-
-				
 			}
 
 			m = Regex.Match (line, @"^\-?\d*\.\d+\s*");
 			if (m.Success) {
 				return;
-		//		lexModel.AppendValues (matchedString, "Numbar Literal");
-				
 			}
 
 			m = Regex.Match (line, @"^\-?\d+\s*");
 			if (m.Success) {
 				return;
-		//		lexModel.AppendValues (matchedString, "Numbr Literal");
-				
 			}		
-
-
 		}
 
 		protected void updateSymbolTable(ref Hashtable symbolTable, ref Gtk.ListStore symbolTree) {

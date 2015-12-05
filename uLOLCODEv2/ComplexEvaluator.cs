@@ -182,13 +182,14 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"WON\s+OF\s+OF$");
+				m = Regex.Match (expression, @"WON\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					var a = (Boolean)stack.Pop ();
 					var b = (Boolean)stack.Pop ();
 
+					// (a || b) && (!a || !b)
 					stack.Push ((a || b) && !(a && b));
 					continue;
 				}
