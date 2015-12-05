@@ -229,6 +229,19 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+				m = Regex.Match (expression, @"DIFFRINT$");
+				if (m.Success) {
+					consoleText.Buffer.Text += "Diffrint Detected\n";
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					stack.Push (a != b);
+					continue;
+				}
+
+
 				m = Regex.Match (expression, @"SMOOSH$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);

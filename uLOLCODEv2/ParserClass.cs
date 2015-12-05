@@ -220,8 +220,7 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*SMOOSH\s*");
 			if (m.Success) {
-				//consoleText.Buffer.Text += "Nope!\n";
-				
+				it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();	
 			}
 
 			m = Regex.Match (line, @"^\s*MAEK\s*");
