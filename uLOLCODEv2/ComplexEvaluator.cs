@@ -20,8 +20,8 @@ namespace uLOLCODEv2
 		public String evaluateComplexExpression(String exp, TextView consoleText, Hashtable symbolTable) {
 			Match m;
 			String expression = exp;
-			//List<String> operations = new List<String>();
 			Stack stack = new Stack ();
+			Boolean[,] isInfiniteArity;
 
 			//consoleText.Buffer.Text += expression + "\n";
 
@@ -257,7 +257,7 @@ namespace uLOLCODEv2
 
 				m = Regex.Match (expression, @"MKAY$");
 				if (m.Success) {
-					//Check if 
+					
 				
 				}
 
