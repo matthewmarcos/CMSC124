@@ -11,6 +11,8 @@ namespace uLOLCODEv2
 	public class EvalClass
 	{	
 
+		ComplexEvaluator comp = new ComplexEvaluator();
+		public static string inputVALUE = " ";
 		public EvalClass ()
 		{
 		}
@@ -82,6 +84,7 @@ namespace uLOLCODEv2
 			if(expression.Length == 1) {
 				//I HAS A VAR
 				//consoleText.Buffer.Text += lines + "\n";
+
 				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 				if(isValidVarident(expression[0]) && m.Success) {
 					//Fix symbol table
@@ -97,6 +100,7 @@ namespace uLOLCODEv2
 			}
 			// ITZ ASSIGNMENT
 			if(expression.Length >= 3) {
+				//Assigning boolean to variable
 				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 				if(isValidVarident(expression[0]) && m.Success && expression[1].Equals("ITZ")) {
 					//Fix symbol table
@@ -239,6 +243,9 @@ namespace uLOLCODEv2
 		public void evalGimmeh(String line, Hashtable symbolTable,TextView consoleText,int lineNumber,Gtk.ListStore symbolTree){
 
 			//check variable "line"
+			//DECLARE AN INSTANCE OF Inputtr;
+			uLOLCODEv2.Inputtr box = new uLOLCODEv2.Inputtr ();
+
 
 			Match m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 			if(isValidVarident(line) && m.Success) {
@@ -249,9 +256,15 @@ namespace uLOLCODEv2
 					return;
 				} else {
 					//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
-					//Get the value
-					onGIMMEH(consoleText,line,symbolTable,symbolTree);
-					//updateSymbolTable (symbolTable,symbolTree)
+
+					//run dialog box
+					box.Run ();
+					//get the input from the dialog box, passed to "inputVALUE"  of type global static string
+					symbolTable [line] = inputVALUE;
+					//Append it to the "console"
+					consoleText.Buffer.Text += inputVALUE+"\n";
+					//update the symbolTable after input.
+					updateSymbolTable (symbolTable, symbolTree);
 								
 				}
 			}
@@ -268,42 +281,7 @@ namespace uLOLCODEv2
 			}
 		
 		}
-
 	
-		//Create input box
-		public void onGIMMEH(TextView consoleText, String variable,Hashtable symbolTable, Gtk.ListStore symbolTree){
-
-			Dialog input = new Dialog ();
-			input.Title = "HEY";
-
-			//Entry widget to hold the text
-			Entry inputBox = new Entry ();
-
-			//Button to handle the input
-			Button send = new Button ();
-			send.Name = "send";
-			send.Label = "Input";
-			//add an event to the button
-			send.Clicked += (sender, e) => sendCode(sender,e,consoleText,inputBox,input,variable,symbolTable,symbolTree);
-
-			//add it to the dialog box
-			input.VBox.Add (inputBox);
-			input.VBox.Add (send);
-			input.ShowAll ();
-
-		}
-		public void sendCode(object sender, EventArgs e, TextView consoleText, Entry inputBox, Dialog input, String variable,Hashtable symbolTable,Gtk.ListStore symbolTree){
-			/*The value input will be given to the var
-			 * 
-			 * 
-			 * */
-			//Thread.Sleep (2000);
-			symbolTable[variable] = inputBox.Text;
-			consoleText.Buffer.Text += inputBox.Text+"\n";
-			updateSymbolTable (symbolTable,symbolTree);
-		
-			input.Destroy ();
-		}
 
 		protected void updateSymbolTable(Hashtable symbolTable, Gtk.ListStore symbolTree) {
 			symbolTree.Clear ();
@@ -314,6 +292,8 @@ namespace uLOLCODEv2
 
 		public Boolean evaluateComplex (ref Hashtable symbolTable,TextView consoleText, String key, String expression) {
 			//Expression is yung natira from I HAS A
+
+			//consoleText.Buffer.Text += "complex says: " + comp.ReturnHello() + "\n";
 			Match m;
 			char[] splitToken = {' '};
 			String[] words = expression.Split (splitToken);
@@ -346,7 +326,8 @@ namespace uLOLCODEv2
 			if(m.Success) {
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexArithmetic(expression, consoleText, symbolTable)) {
-					symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
+					//symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
+					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 					return true;
 				} else {
 					return false;
@@ -359,10 +340,9 @@ namespace uLOLCODEv2
 				
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexBoolean(expression, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += "Valid boolean \n";
-					symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
+					//symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
+					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 					return true;
-
 				} else {
 					return false;
 				}
