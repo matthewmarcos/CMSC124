@@ -50,7 +50,8 @@ namespace uLOLCODEv2
 				"NOOB",
 				"WIN",
 				"FAIL",
-				"IT"
+				"IT",
+				"MKAY"
 			};
 			foreach(var pattern in patterns) {
 				if(pattern.Equals(variable)) {
