@@ -361,6 +361,39 @@ namespace uLOLCODEv2
 					currTier--;
 					continue; 
 				}
+					
+				m = Regex.Match (expression, @"ANY\s+OF$");
+				if (m.Success) {
+					if (currTier <= 0) {
+						return "UNDEFINED";
+					}
+
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					List<Boolean> bools = new List<Boolean> ();
+					Boolean answer = false;
+
+					for (var i = 0; i < mkTier[currTier]; i++) {
+						var a = stack.Pop().ToString();
+
+						if (a.Equals ("True")) {
+							bools.Add (true);
+						} else if (a.Equals ("False")) {
+							bools.Add (false);
+						} else {
+							return "UNDEFINED";
+						}
+					}
+
+					for (var i = 0; i < mkTier [currTier]; i++) {
+						answer = answer || bools [i];					
+					}
+					stack.Push (answer);
+					//continue;
+					currTier--;
+					continue; 
+				}
+
 
 				m = Regex.Match (expression, @"\s+MKAY$");
 				if (m.Success) {

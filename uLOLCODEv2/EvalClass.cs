@@ -218,7 +218,7 @@ namespace uLOLCODEv2
 				//===============End of Number Literal==============//
 				//===============Expression=========================//
 			m = Regex.Match(line, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
-			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*|DIFFRINT)\s*");
+			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*|DIFFRINT|ANY\s+OF)\s*");
 			if(m.Success) {
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexArithmetic(line, consoleText, symbolTable)) {
@@ -329,7 +329,7 @@ namespace uLOLCODEv2
 			}
 
 			// Check if arithmetic, boolean, infinite arity operation.
-			m = Regex.Match(expression, @"^\s*(DIFFRINT\s*|SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM\s*|ALL\s+OF\s*)\s*");
+			m = Regex.Match(expression, @"^\s*(DIFFRINT\s*|SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM\s*|ALL\s+OF\s*|ANY\s+OF)\s*");
 			if(m.Success) {
 				//consoleText.Buffer.Text += "Tascascasc\n";
 				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
