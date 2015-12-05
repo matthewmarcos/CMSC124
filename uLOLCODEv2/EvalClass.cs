@@ -332,9 +332,9 @@ namespace uLOLCODEv2
 			}
 
 			// Check if arithmetic, boolean, infinite arity operation.
-			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
-			BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM|ALL\s+OF)\s*");
+			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM\s*|ALL\s+OF\s*)\s*");
 			if(m.Success) {
+				//consoleText.Buffer.Text += "Tascascasc\n";
 				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 				return true;
 			} 		
