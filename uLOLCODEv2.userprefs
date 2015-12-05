@@ -1,8 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/EvalClass.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/ComplexEvaluator.cs">
     <Files>
-      <File FileName="uLOLCODEv2/EvalClass.cs" Line="271" Column="1" />
+      <File FileName="uLOLCODEv2/EvalClass.cs" Line="146" Column="34" />
+      <File FileName="uLOLCODEv2/ParserClass.cs" Line="240" Column="11" />
+      <File FileName="uLOLCODEv2/ComplexEvaluator.cs" Line="241" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

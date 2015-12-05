@@ -10,6 +10,7 @@ namespace uLOLCODEv2
 	public class ParserClass
 	{
 		EvalClass eval = new EvalClass ();
+		ComplexEvaluator comp = new ComplexEvaluator();
 		public ParserClass ()
 		{
 		}
@@ -81,7 +82,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -92,7 +93,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -104,7 +105,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -116,7 +117,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;				
@@ -127,7 +128,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -139,7 +140,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -151,7 +152,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString();
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -163,7 +164,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexBoolean(line, consoleText, symbolTable);
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 		//		lexModel.AppendValues (matchedString, "AND Op");
@@ -175,7 +176,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexBoolean(line, consoleText, symbolTable);
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				
@@ -186,7 +187,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
-					it = eval.evalComplexBoolean(line, consoleText, symbolTable);
+					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				
@@ -194,7 +195,7 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*NOT\s*");
 			if (m.Success) {
-								
+				it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();			
 			}
 
 			m = Regex.Match (line, @"^\s*ALL\s+OF\s*");

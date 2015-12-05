@@ -13,6 +13,10 @@ namespace uLOLCODEv2
 		{	
 		}
 
+		public String removeQuotes(String expression) {
+			return expression.Substring (1, expression.Length - 2);
+		}
+
 		public String evaluateComplexExpression(String exp, TextView consoleText, Hashtable symbolTable) {
 			Match m;
 			String expression = exp;
@@ -43,27 +47,34 @@ namespace uLOLCODEv2
 				if (m.Success && symbolTable.ContainsKey(m.Value)) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					consoleText.Buffer.Text += m.Value + " found!\n";
 
 					//Pushing variables.
 					String myValue = symbolTable[m.Value].ToString();
 					int number;
-					Boolean isNumeric = int.TryParse(expression, out number);
+					Boolean isNumeric = int.TryParse(myValue, out number);
+
+					//stack.Push (5);
 
 					m = Regex.Match (myValue, @"\s*"".*""$");
 
 					if (isNumeric) { //Numbr 
 						stack.Push (number);
-					} else if (myValue.Equals ("WIN")) { //Troof 
+					} else if (myValue.Equals ("WIN")) { //Troof 						
 						stack.Push (true);						
 					} else if (myValue.Equals ("FAIL")) { //Troof 
 						stack.Push (false);
 					} else if (m.Success) { //Yarn 
 						stack.Push (m.Value);
-					} else {
-						//Int32.Parse((String)symbolTable[operations[i]])
-					}
+					} 
 
+					continue;
+				}
+
+				m = Regex.Match (expression, @"""([^""]*|)""$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					stack.Push (m.Value);
 					continue;
 				}
 
@@ -162,6 +173,15 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+				m = Regex.Match (expression, @"NOT$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (Boolean)stack.Pop ();
+					stack.Push (!a);
+					continue;
+				}
+
 				m = Regex.Match (expression, @"WON\s+OF\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -192,6 +212,19 @@ namespace uLOLCODEv2
 					var b = (Boolean)stack.Pop ();
 
 					stack.Push (a && b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"SMOOSH$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (String)stack.Pop ();
+					var b = (String)stack.Pop ();
+					a = removeQuotes (a);
+					b = removeQuotes (b);
+					consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
+					stack.Push ('"' + a + b + '"');
 					continue;
 				}
 

@@ -302,7 +302,16 @@ namespace uLOLCODEv2
 				if (validNumber (words [0])) {
 					symbolTable [key] = words [0];
 					return true;
-				//Check if word[0] is a valid variable identifier
+				//Check if word[0] is a valid Boolean
+				} else if (words[0].Equals("WIN") || words[0].Equals("FAIL")) {
+					if (words [0].Equals ("WIN")) {
+						symbolTable [key] = "WIN";
+						return true;
+					} else {
+						symbolTable [key] = "FAIL";
+						return true;
+					}
+				//Check if word[0] is a valid Variable
 				} else if (Regex.IsMatch(expression, @"^\s*[a-zA-Z][a-zA-z\d]*\s*") && isValidVarident (words [0])) {
 					if (symbolTable.ContainsKey (expression)) {
 						symbolTable [key] = symbolTable [expression];
@@ -322,7 +331,8 @@ namespace uLOLCODEv2
 			}
 
 			// Check if arithmetic operation
-			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)\s*");
+			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
+			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
 			if(m.Success) {
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexArithmetic(expression, consoleText, symbolTable)) {
@@ -332,21 +342,21 @@ namespace uLOLCODEv2
 				} else {
 					return false;
 				}
+			} 		
+
+			m = Regex.Match(expression, @"^\s*SMOOSH\s*");
+			if(m.Success) {
+				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				return true;
 			}
 
-			// Check if boolean expression
-			m = Regex.Match(expression, @"^\s*(BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
+			m = Regex.Match(expression, @"^\s*NOT\s*");
 			if(m.Success) {
-				
-				//Check if complexArithmetic is valid or not
-				if(isValidComplexBoolean(expression, consoleText, symbolTable)) {
-					//symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
-					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
-					return true;
-				} else {
-					return false;
-				}
+				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				return true;
 			}
+
+
 
 			consoleText.Buffer.Text += "Error: Invalid assignment!\n";
 			return false;
@@ -401,7 +411,7 @@ namespace uLOLCODEv2
 					break;
 				}
 			}
-			
+				
 
 			if(stack.Pop()) {
 				return "WIN";
@@ -409,7 +419,6 @@ namespace uLOLCODEv2
 				return "FAIL";
 			}
 
-			return "WIN";
 		} 
 
 
