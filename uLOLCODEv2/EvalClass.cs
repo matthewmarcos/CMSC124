@@ -13,6 +13,7 @@ namespace uLOLCODEv2
 
 		ComplexEvaluator comp = new ComplexEvaluator();
 		public static string inputVALUE = " ";
+		//ParserClass parse = new ParserClass();
 		public EvalClass ()
 		{
 		}
@@ -663,11 +664,127 @@ namespace uLOLCODEv2
 
 
 		}
-
 		public void evaluateConditions(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
+			String value = symbolTable ["IT"].ToString();
+			int i = lineNumber;
+			int j;
+			Boolean isComment = false;
+			//fix the value of IT to a boolean;
+			if (value.Equals ("WIN") || value.Equals ("FAIL")) {
+
+			} else {
+				/*if String === WIN
+				 * if number === WIN
+				 * if 0 === FAIL
+				 * if "" === FAIL
+				 */
+
+				//===IF NUMBER ===//
+				Match m = Regex.Match (value, @"^\-?\d*\.\d+\s*");
+				if (m.Success) {
+					if (m.Value.Equals ("0")) {
+						value = "FAIL";
+					} else {
+						value = "WIN";
+					}
+
+				}
+
+				m = Regex.Match (value, @"^\-?\d+\s*");
+				if (m.Success) {
+					if (m.Value.Equals ("0")) {
+						value = "FAIL";
+					} else {
+						value = "WIN";
+					}
+
+				}
+				//=====END OF NUMBER=====//
+				//=====IF EMPTY STRING =====//
+				m = Regex.Match (value, @"^\s*""");
+				if (m.Success) {
+					if (value [1].Equals ("\"")) {
+						value = "FAIL";
+					} else {
+						value = "WIN";
+					}
+
+				}
+				//=====END OF STRING====//
+
+			}
+
+			for (; i<codes.Length; i++) {
+
+				Match m = Regex.Match (codes[i], @"^\s*YA\s+RLY\s*");
+				if (m.Success && value.Equals("WIN")) {
+					j = i+1;	//new line i scan;
+					for(; j < codes.Length ; j++) {
+
+						//IF MEBBE OR NO WAI OR OIC IS DETECTED
+						Match n = Regex.Match(codes[j],@"^\s*MEBBE\s*");
+						Match o = Regex.Match (codes [j], @"^\s*NO\s+WAI\s*");
+						Match p = Regex.Match (codes [j], @"^\s*OIC\s*$");
+						Match q = Regex.Match (codes [j], @"^\s*NO\s+WAI\s*");
+						Match r = Regex.Match (codes[j], @"^\s*O\s+RLY\?\s*$");
+						if (n.Success || o.Success || p.Success || q.Success || r.Success) {
+							consoleText.Buffer.Text += "STOP!\n";
+							i = j;
+							break;
+						} else {
+							//ELSE, EVALUATE THE LINES!
+							ParserClass parse = new ParserClass ();
+							parse.parseLines(codes [j], ref isComment, i, ref symbolTable, ref MainWindow.symbolTree, consoleText, codes);
+						}
+						i = j;
+					}
+
+				}
+
+				m = Regex.Match (codes[i], @"^\s*MEBBE\s*");
+				if (m.Success) {
+
+
+				}
+
+				m = Regex.Match (codes[i], @"^\s*NO\s+WAI\s*");
+				if (m.Success && value.Equals("FAIL")) {
+					j = i+1;	//new line i scan;
+					for(; j < codes.Length ; j++) {
+
+						//IF MEBBE OR NO WAI OR OIC IS DETECTED
+						Match n = Regex.Match(codes[j],@"^\s*MEBBE\s*");
+						Match o = Regex.Match (codes [j], @"^\s*YA\s+RLY\s*");
+						Match p = Regex.Match (codes [j], @"^\s*OIC\s*$");
+						Match q = Regex.Match (codes [j], @"^\s*NO\s+WAI\s*");
+						Match r = Regex.Match (codes[j], @"^\s*O\s+RLY\?\s*$");
+						if (n.Success || o.Success || p.Success || q.Success || r.Success) {
+							consoleText.Buffer.Text += "STOP!\n";
+							i = j;
+							break;
+						} else {
+							//ELSE, EVALUATE THE LINES!
+							ParserClass parse = new ParserClass ();
+							parse.parseLines(codes [j], ref isComment, i, ref symbolTable, ref MainWindow.symbolTree, consoleText, codes);
+						}
+						i = j;
+					}
+				}
+
+				m = Regex.Match (codes [i], @"^\s*OIC\s*$");
+				if (m.Success) {
+					MainWindow.detectedOIC = true;
+					MainWindow.newIndex = i;
+					consoleText.Buffer.Text += "EVERYTHING IS DONE\n";
+					break;
+				}
+
+
+			}
 
 
 		}
+
 		/*
 		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez,		 Gtk.ListStore lexmodelz) {
 			this.lexModel = lexmodelz;

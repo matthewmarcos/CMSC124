@@ -1,20 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-<<<<<<< HEAD
-  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/EvalClass.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/MainWindow.cs">
     <Files>
-      <File FileName="uLOLCODEv2/EvalClass.cs" Line="639" Column="16" />
-      <File FileName="uLOLCODEv2/ParserClass.cs" Line="281" Column="61" />
-      <File FileName="uLOLCODEv2/MainWindow.cs" Line="111" Column="1" />
-=======
-  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/ComplexEvaluator.cs">
-    <Files>
-      <File FileName="uLOLCODEv2/EvalClass.cs" Line="1" Column="1" />
-      <File FileName="uLOLCODEv2/LexerClass.cs" Line="18" Column="12" />
-      <File FileName="uLOLCODEv2/ComplexEvaluator.cs" Line="192" Column="28" />
-      <File FileName="uLOLCODEv2/ParserClass.cs" Line="187" Column="25" />
->>>>>>> f6560d8640aaea4784f5b9e10f5ce514f57939b9
+      <File FileName="uLOLCODEv2/EvalClass.cs" Line="776" Column="35" />
+      <File FileName="uLOLCODEv2/ParserClass.cs" Line="18" Column="170" />
+      <File FileName="uLOLCODEv2/LexerClass.cs" Line="349" Column="5" />
+      <File FileName="uLOLCODEv2/MainWindow.cs" Line="108" Column="18" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="uLOLCODEv2" expanded="True">
+            <Node name="MainWindow.cs" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

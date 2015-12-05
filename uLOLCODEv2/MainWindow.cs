@@ -14,6 +14,10 @@ public partial class MainWindow: Gtk.Window
 	public static Gtk.ListStore lexModel = new Gtk.ListStore(typeof(string),typeof(string));
 	public static Gtk.ListStore symbolTree = new Gtk.ListStore(typeof(string),typeof(string));
 	public static Hashtable symbolTable = new Hashtable ();
+	//O RLY - OIC Needs
+	public static Boolean detectedOIC = false;
+	public static int newIndex = 0;
+
 //	Identifier ident = new Identifier();
 	EvalClass eval = new EvalClass ();
 	LexerClass lexer = new LexerClass();
@@ -100,6 +104,10 @@ public partial class MainWindow: Gtk.Window
 		}
 
 		for(var i = 0 ; i < lines.Length ; i++) {
+			if(detectedOIC){
+				i = newIndex;
+				detectedOIC = false;
+			}
 			parser.parseLines(lines[i], ref isComment, i, ref symbolTable, ref symbolTree, consoleText,lines);
 		}
 
