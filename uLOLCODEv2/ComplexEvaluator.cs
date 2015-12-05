@@ -39,7 +39,9 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (true);
-
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				}
 
@@ -49,7 +51,9 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (false);
-
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				} 	
 
@@ -239,7 +243,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"EITHER\s+OF$");
+				m = Regex.Match (expression, @"\s+EITHER\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
@@ -251,7 +255,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"BOTH\s+OF$");
+				m = Regex.Match (expression, @"\s+BOTH\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
@@ -264,7 +268,7 @@ namespace uLOLCODEv2
 				}
 
 
-				m = Regex.Match (expression, @"BOTH\s+SAEM$");
+				m = Regex.Match (expression, @"\s+BOTH\s+SAEM$");
 				if (m.Success) {
 					consoleText.Buffer.Text += "Both saem Detected\n";
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -277,7 +281,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"DIFFRINT$");
+				m = Regex.Match (expression, @"\s+DIFFRINT$");
 				if (m.Success) {
 					consoleText.Buffer.Text += "Diffrint Detected\n";
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -298,19 +302,21 @@ namespace uLOLCODEv2
 					}
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-
-					consoleText.Buffer.Text += "a\n";
 					List<String> strings = new List<String> ();
 					String tempString = "";
-
-
 
 					for (var i = 0; i < mkTier[currTier]; i++) {
 						var a = stack.Pop().ToString();
 
+						if (a.Equals ("True") || a.Equals ("False")) {
+							return "UNDEFINED";
+						}
+
 						if (Regex.IsMatch (a, @"\s*"".*""$")) {
+							
 							a = removeQuotes (a);
 						}
+
 						strings.Add (a);
 					}
 
@@ -323,7 +329,7 @@ namespace uLOLCODEv2
 					continue; 
 				}
 
-				m = Regex.Match (expression, @"MKAY$");
+				m = Regex.Match (expression, @"\s+MKAY$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
@@ -331,7 +337,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				return "UNDEFINED2" + expression;
+				return "UNDEFINED" + expression;
 			}
 
 			String result = stack.Pop ().ToString();
