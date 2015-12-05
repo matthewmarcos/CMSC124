@@ -39,7 +39,9 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (true);
-
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				}
 
@@ -49,7 +51,9 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (false);
-
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
 					continue;
 				} 	
 
@@ -313,7 +317,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"EITHER\s+OF$");
+				m = Regex.Match (expression, @"\s+EITHER\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
@@ -345,7 +349,7 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					stack.Push (a == b);
+					stack.Push (a.Equals(b));
 
 					continue;
 				}
@@ -370,19 +374,21 @@ namespace uLOLCODEv2
 					}
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-
-					consoleText.Buffer.Text += "a\n";
 					List<String> strings = new List<String> ();
 					String tempString = "";
-
-
 
 					for (var i = 0; i < mkTier[currTier]; i++) {
 						var a = stack.Pop().ToString();
 
+						if (a.Equals ("True") || a.Equals ("False")) {
+							return "UNDEFINED";
+						}
+
 						if (Regex.IsMatch (a, @"\s*"".*""$")) {
+							
 							a = removeQuotes (a);
 						}
+
 						strings.Add (a);
 					}
 
@@ -395,7 +401,73 @@ namespace uLOLCODEv2
 					continue; 
 				}
 
-				m = Regex.Match (expression, @"MKAY$");
+				//All OF
+				m = Regex.Match (expression, @"ALL\s+OF$");
+				if (m.Success) {
+					if (currTier <= 0) {
+						return "UNDEFINED";
+					}
+
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					List<Boolean> bools = new List<Boolean> ();
+					Boolean answer = true;
+
+					for (var i = 0; i < mkTier[currTier]; i++) {
+						var a = stack.Pop().ToString();
+
+						if (a.Equals ("True")) {
+							bools.Add (true);
+						} else if (a.Equals ("False")) {
+							bools.Add (false);
+						} else {
+							return "UNDEFINED";
+						}
+					}
+
+					for (var i = 0; i < mkTier [currTier]; i++) {
+						answer = answer && bools [i];					
+					}
+					stack.Push (answer);
+					//continue;
+					currTier--;
+					continue; 
+				}
+					
+				m = Regex.Match (expression, @"ANY\s+OF$");
+				if (m.Success) {
+					if (currTier <= 0) {
+						return "UNDEFINED";
+					}
+
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					List<Boolean> bools = new List<Boolean> ();
+					Boolean answer = false;
+
+					for (var i = 0; i < mkTier[currTier]; i++) {
+						var a = stack.Pop().ToString();
+
+						if (a.Equals ("True")) {
+							bools.Add (true);
+						} else if (a.Equals ("False")) {
+							bools.Add (false);
+						} else {
+							return "UNDEFINED";
+						}
+					}
+
+					for (var i = 0; i < mkTier [currTier]; i++) {
+						answer = answer || bools [i];					
+					}
+					stack.Push (answer);
+					//continue;
+					currTier--;
+					continue; 
+				}
+
+
+				m = Regex.Match (expression, @"\s+MKAY$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
@@ -403,7 +475,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				return "UNDEFINED2 " + expression;
+				return "UNDEFINED Expression " + expression;
 			}
 
 			String result = stack.Pop ().ToString();
