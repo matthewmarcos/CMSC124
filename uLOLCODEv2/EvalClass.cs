@@ -626,8 +626,50 @@ namespace uLOLCODEv2
 			consoleText.Buffer.Text += (value+"\n");
 
 		}
+
+		public void evalORLY(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
+			/*IF ORLY IS DETECTED
+			 * CHECK VALUE OF IT
+			 * IF IT IS TRUE GO TO YA RLY
+			 * IF NOT
+			 * CHECK IF MEBBE
+			 * IF MEBBE, CHECK CONDITION
+			 * IF NOT GO TO NO WAI
+			 * */
+			//codes [lineNumber];	<=== current location of ORLY
+			Boolean paired = false;
+			int i = lineNumber;
+			for (; i<codes.Length; i++) {
+				Match m = Regex.Match (codes [i], @"^\s*OIC\s*$");
+				if (m.Success) {
+					paired = true;
+					break;
+				} else {
+					continue;
+				}
+
+			}
+			//if after the loop, paired is still false, then there was no OIC detected;
+			//if no OIC dected, throw error and return;
+			//if OIC detected, then gogogogo
+			if (!paired) {
+
+				consoleText.Buffer.Text += "Syntax Error: OIC expected\n";
+				return;
+			} else {
+
+				evaluateConditions (codes,lineNumber,symbolTable,consoleText);
+			}
+
+
+		}
+
+		public void evaluateConditions(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
+
+
+		}
 		/*
-		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez, Gtk.ListStore lexmodelz) {
+		public EvalClass(Hashtable symbolTablez, Gtk.ListStore symbolTreez,		 Gtk.ListStore lexmodelz) {
 			this.lexModel = lexmodelz;
 			this.symbolTree = symbolTreez;
 			this.symbolTable = symbolTablez;
