@@ -22,27 +22,33 @@ namespace uLOLCODEv2
 			String expression = exp;
 			Stack stack = new Stack ();
 			//Boolean[,] isInfiniteArity;
-
+			int mkTier = 0;
+			Boolean infiniteArity = false;
 			//consoleText.Buffer.Text += expression + "\n";
 
-			while (!String.IsNullOrEmpty(expression)) {
-				//consoleText.Buffer.Text += expression + "\n";
+			while (!String.IsNullOrEmpty (expression)) {
+				
+				//Win literal
 				m = Regex.Match (expression, @"WIN$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (true);
+
 					continue;
 				}
 
+				//Fail literal
 				m = Regex.Match (expression, @"FAIL$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (false);
+
 					continue;
 				} 	
 
+				//varident
 				m = Regex.Match (expression, @"[a-zA-Z][a-zA-z\d]*$");
 				if (m.Success && symbolTable.ContainsKey(m.Value)) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -67,22 +73,34 @@ namespace uLOLCODEv2
 						stack.Push (m.Value);
 					} 
 
+					if (infiniteArity) {
+						mkTier++;
+					}
 					continue;
 				}
 
-				m = Regex.Match (expression, @"""([^""]*|)""$");
+				//String Literal
+				m = Regex.Match (expression, @"""([^""]*)""$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (m.Value);
+					if (infiniteArity) {
+						mkTier++;
+					}
+
 					continue;
 				}
 
+				//Number Literal
 				m = Regex.Match (expression, @"\-?\d+\s*$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					stack.Push (Int32.Parse(m.Value));
+					if (infiniteArity) {
+						mkTier++;
+					}
 					continue;
 				}
 
@@ -102,6 +120,9 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a + b);
+					if (infiniteArity) {
+						mkTier--;
+					}
 					continue;
 				}
 
@@ -112,6 +133,9 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a - b);
+					if (infiniteArity) {
+						mkTier++;
+					}
 					continue;
 				}
 
@@ -122,6 +146,9 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					stack.Push (a * b);
+					if (infiniteArity) {
+						mkTier--;
+					}
 					continue;
 				}
 
@@ -132,9 +159,12 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					if (b == 0) {
-						return "UNDEFINED!";
+						return "UNDEFINED";
 					}
 					stack.Push (a / b);
+					if (infiniteArity) {
+						mkTier--;
+					}
 					continue;
 				}
 
@@ -145,9 +175,12 @@ namespace uLOLCODEv2
 					var a = (int)stack.Pop ();
 					var b = (int)stack.Pop ();
 					if (b == 0) {
-						return "UNDEFINED!";
+						return "UNDEFINED";
 					}
 					stack.Push (a % b);
+					if (infiniteArity) {
+						mkTier--;
+					}
 					continue;
 				}
 
@@ -159,6 +192,9 @@ namespace uLOLCODEv2
 					var b = (int)stack.Pop ();
 
 					stack.Push ((a > b) ? a : b);
+					if (infiniteArity) {
+						mkTier--;
+					}
 					continue;
 				}
 
@@ -170,6 +206,9 @@ namespace uLOLCODEv2
 					var b = (int)stack.Pop ();
 
 					stack.Push ((a > b) ? b : a);
+					if (infiniteArity) {
+						mkTier--;
+					}
 					continue;
 				}
 
@@ -190,6 +229,7 @@ namespace uLOLCODEv2
 					var b = (Boolean)stack.Pop ();
 
 					stack.Push ((a || b) && !(a && b));
+
 					continue;
 				}
 
@@ -201,6 +241,7 @@ namespace uLOLCODEv2
 					var b = (Boolean)stack.Pop ();
 
 					stack.Push (a || b);
+
 					continue;
 				}
 
@@ -212,6 +253,7 @@ namespace uLOLCODEv2
 					var b = Convert.ToBoolean (stack.Pop ().ToString());
 
 					stack.Push (a && b);
+
 					continue;
 				}
 
@@ -225,6 +267,7 @@ namespace uLOLCODEv2
 					var b = stack.Pop ().ToString();
 
 					stack.Push (a == b);
+
 					continue;
 				}
 
@@ -237,39 +280,52 @@ namespace uLOLCODEv2
 					var b = stack.Pop ().ToString();
 
 					stack.Push (a != b);
+
 					continue;
 				}
 
 
 				m = Regex.Match (expression, @"SMOOSH$");
 				if (m.Success) {
+					if (!infiniteArity) {
+						return "UNDEFINED";
+					}
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = stack.Pop ().ToString();
-					var b = stack.Pop ().ToString();
 
-					//String literal
-					if (Regex.IsMatch (a, @"\s*"".*""$")) {
-						a = removeQuotes (a);
+					consoleText.Buffer.Text += "a\n";
+					List<String> strings = new List<String> ();
+					String tempString = "";
+
+
+
+					for (var i = 0; i < mkTier; i++) {
+						var a = stack.Pop().ToString();
+
+						if (Regex.IsMatch (a, @"\s*"".*""$")) {
+							a = removeQuotes (a);
+						}
+						strings.Add (a);
 					}
 
-					//String literal
-					if (Regex.IsMatch (b, @"\s*"".*""$")) {
-						b = removeQuotes (b);
+					for (var i = 0; i < mkTier ; i++) {
+						tempString += strings [i];
 					}
-			
-					//consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
-					stack.Push ("\"" + a + b + "\"");
+					stack.Push ("\"" + tempString + "\"");
 					continue;
+
+
 				}
 
 				m = Regex.Match (expression, @"MKAY$");
 				if (m.Success) {
-					
-				
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					infiniteArity = true;
+					continue;
 				}
 
-				break;
+				return "UNDEFINED2" + expression;
 			}
 
 			String result = stack.Pop ().ToString();
@@ -282,8 +338,6 @@ namespace uLOLCODEv2
 			}
 			//return stack.Pop ().ToString();
 		}
-
-
 	}
 }
 
