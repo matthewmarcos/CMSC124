@@ -100,7 +100,7 @@ public partial class MainWindow: Gtk.Window
 		}
 
 		for(var i = 0 ; i < lines.Length ; i++) {
-			parser.parseLines(lines[i], ref isComment, i, ref symbolTable, ref symbolTree, consoleText);
+			parser.parseLines(lines[i], ref isComment, i, ref symbolTable, ref symbolTree, consoleText,lines);
 		}
 
 	}
