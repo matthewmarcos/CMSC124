@@ -249,12 +249,14 @@ namespace uLOLCODEv2
 				matchedString = matchedString.Trim ();
 		//		lexModel.AppendValues (matchedString, "Print Op");
 
-				// eval.evalVisible (line, symbolTable, consoleText, lineNumber);
+				 eval.evalVisible (line, symbolTable, consoleText, lineNumber);
 				
 			}
 
 			m = Regex.Match (line, @"^\s*GIMMEH\s*");
 			if (m.Success) {
+				line = line.Remove (0,m.Value.Length);
+				eval.evalGimmeh (line, symbolTable, consoleText, lineNumber, symbolTree);
 							
 			}
 

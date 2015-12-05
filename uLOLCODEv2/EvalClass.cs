@@ -4,16 +4,16 @@ using uLOLCODEv2;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace uLOLCODEv2
 {
 	public class EvalClass
-	{
+	{	
 
 		public EvalClass ()
 		{
 		}
-
 		public Boolean isValidVarident (String variable) {
 			String[] patterns = {
 				"HAI",
@@ -251,8 +251,8 @@ namespace uLOLCODEv2
 					//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
 					//Get the value
 					onGIMMEH(consoleText,line,symbolTable,symbolTree);
-					//updateSymbolTable (symbolTable,symbolTree);
-				
+					//updateSymbolTable (symbolTable,symbolTree)
+								
 				}
 			}
 		
@@ -266,49 +266,42 @@ namespace uLOLCODEv2
 			} else {
 				return false;
 			}
+		
 		}
 
 	
 		//Create input box
 		public void onGIMMEH(TextView consoleText, String variable,Hashtable symbolTable, Gtk.ListStore symbolTree){
 
-			//Create a new window to contain the Entry box and the button to send it
-			Window input = new Window ("Input");
-			input.Resize (350, 100);
-
-			//VBox as a container to allow the two widgets in 1 place
-			VBox boxx = new VBox ();
+			Dialog input = new Dialog ();
+			input.Title = "HEY";
 
 			//Entry widget to hold the text
 			Entry inputBox = new Entry ();
-			inputBox.Name = "inputBox";
-			inputBox.SetSizeRequest (100, 30);
 
 			//Button to handle the input
 			Button send = new Button ();
 			send.Name = "send";
 			send.Label = "Input";
-
-			//Add an event handler for a button when clicked.
+			//add an event to the button
 			send.Clicked += (sender, e) => sendCode(sender,e,consoleText,inputBox,input,variable,symbolTable,symbolTree);
 
-			//add the Vbox first
-			input.Add (boxx);
-			//Add Entry and Button to contain 
-			boxx.Add (inputBox);
-			boxx.Add (send);
-
-			//show all the widgets
+			//add it to the dialog box
+			input.VBox.Add (inputBox);
+			input.VBox.Add (send);
 			input.ShowAll ();
+
 		}
-		public void sendCode(object sender, EventArgs e, TextView consoleText, Entry inputBox, Window input, String variable,Hashtable symbolTable,Gtk.ListStore symbolTree){
+		public void sendCode(object sender, EventArgs e, TextView consoleText, Entry inputBox, Dialog input, String variable,Hashtable symbolTable,Gtk.ListStore symbolTree){
 			/*The value input will be given to the var
 			 * 
 			 * 
 			 * */
+			//Thread.Sleep (2000);
 			symbolTable[variable] = inputBox.Text;
 			consoleText.Buffer.Text += inputBox.Text+"\n";
 			updateSymbolTable (symbolTable,symbolTree);
+		
 			input.Destroy ();
 		}
 
