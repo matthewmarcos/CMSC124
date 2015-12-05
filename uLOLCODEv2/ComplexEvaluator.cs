@@ -255,7 +255,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				m = Regex.Match (expression, @"\s+BOTH\s+OF$");
+				m = Regex.Match (expression, @"BOTH\s+OF$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
@@ -268,20 +268,20 @@ namespace uLOLCODEv2
 				}
 
 
-				m = Regex.Match (expression, @"\s+BOTH\s+SAEM$");
+				m = Regex.Match (expression, @"BOTH\s+SAEM$");
 				if (m.Success) {
-					consoleText.Buffer.Text += "Both saem Detected\n";
+					//consoleText.Buffer.Text += "Both saem Detected\n";
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					stack.Push (a == b);
+					stack.Push (a.Equals(b));
 
 					continue;
 				}
 
-				m = Regex.Match (expression, @"\s+DIFFRINT$");
+				m = Regex.Match (expression, @"DIFFRINT$");
 				if (m.Success) {
 					consoleText.Buffer.Text += "Diffrint Detected\n";
 					expression = expression.Remove (m.Index, m.Value.Length);
