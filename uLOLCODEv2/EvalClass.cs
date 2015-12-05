@@ -333,16 +333,19 @@ namespace uLOLCODEv2
 
 			// Check if arithmetic operation
 			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
-			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
+			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*|BOTH\sSAEM)\s*");
 			if(m.Success) {
+				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				return true;
 				//Check if complexArithmetic is valid or not
+				/*
 				if(isValidComplexArithmetic(expression, consoleText, symbolTable)) {
 					//symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
 					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 					return true;
 				} else {
 					return false;
-				}
+				}*/
 			} 		
 
 			m = Regex.Match(expression, @"^\s*SMOOSH\s*");
