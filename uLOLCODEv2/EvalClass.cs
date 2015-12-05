@@ -143,76 +143,59 @@ namespace uLOLCODEv2
 		 * 
 			 */
 			Match m;
-			char[] splitToken = {' '}; //<=== tentative
-			String[] expression = line.Split (splitToken);
-
-
-			if(expression.Length == 1) {
-			
+			//char[] splitToken = {' '}; //<=== tentative
+			//String[] expression;
 				//CHECK IF STRING LITERAL
 
 				//======Start of string literal eval ============//
 
 				// !!! ISSUE: String literal with spaces.   Ex.   "S hit"; <----------------------------------------------------------
-				m = Regex.Match (expression[0], @"^\s*""");
+				m = Regex.Match (line, @"^\s*""");
 				if (m.Success) {
-					String sline = expression[0];		//<--- for clarity's sake
+					String sline = line;		//<--- for clarity's sake
 					String stringLiteral = "";
-					sline = sline.Remove (0, m.Value.Length);
-					String matchedString = m.Value;
-
-					for(; sline.Length > 0 && sline[0] != '"';) {
-						stringLiteral += sline[0];
-						sline = sline.Remove(0, 1);
+						//if the string has a paired quotation marks
+					if(sline.EndsWith("\"")){
+						for(var i = 0; i < sline.Length;i++){
+							if (i==0 || i==(sline.Length-1) ){
+								continue;
+							}
+							else{
+								stringLiteral += sline [i];
+								}
+							}
+							consoleText.Buffer.Text += stringLiteral+"\n";
 
 					}
-
-					if(sline.Length != 0) {
-
-						consoleText.Buffer.Text += (stringLiteral+"\n");
-						sline = sline.Remove(0, 1);
-					} else {
-
-						//ERROR -> unpaired quotation mark
+					else{
 						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "! : Unpaired quotes (Visible Func)\n";
-
 					}
-					return;
 
+					return;
 				}
 				//=======End of String Literal Eval ============//
 
 				//==================VARIABLE==========================//
-				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
-				if(isValidVarident(expression[0]) && m.Success) {
+				m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
+				if(isValidVarident(line) && m.Success) {
 						//If wala sa symbol table
-					if(!symbolTable.ContainsKey(expression[0])) {	//if wala pa sa symbol table
+					if(!symbolTable.ContainsKey(line)) {	//if wala pa sa symbol table
 
 						consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Variable undeclared(Visible Func)\n");
 						return;
 					} else {
 							//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
-						var stringLit = symbolTable[expression[0]];
+						var stringLit = symbolTable[line];
 						String printThis = stringLit.ToString();			//<------ Gawin String yung returned object;
-						String printTlaga = "";
-						printThis = printThis.Remove(0,1);
-						//printThis.Remove(0,1);
-						for(; printThis.Length > 0 && printThis[0] != '"';) {
-							printTlaga += printThis[0];
-							printThis = printThis.Remove(0, 1);
-
-						}
-
-
-						consoleText.Buffer.Text += (printTlaga+ "\n");
-
+						//Check if STRING OR NUM
+						fixVISIBLE (printThis,consoleText);
 						return;
 					}
 				}
 				//==================END OF VAR EVAL=====================//
 			
 				//==================Number Literal =====================//
-				m = Regex.Match (expression[0], @"^\-?\d*\.\d+\s*");
+				m = Regex.Match (line, @"^\-?\d*\.\d+\s*");
 				if (m.Success) {
 
 					String matchedString = m.Value;
@@ -221,7 +204,7 @@ namespace uLOLCODEv2
 					return;
 				}
 
-				m = Regex.Match (expression[0], @"^\-?\d+\s*");
+				m = Regex.Match (line, @"^\-?\d+\s*");
 				if (m.Success) {
 				
 					String matchedString = m.Value;
@@ -232,10 +215,23 @@ namespace uLOLCODEv2
 
 
 				//===============End of Number Literal==============//
-			
+				//===============Expression=========================//
+			m = Regex.Match(line, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
+			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
+			if(m.Success) {
+				//Check if complexArithmetic is valid or not
+				if(isValidComplexArithmetic(line, consoleText, symbolTable)) {
+					//symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
+					consoleText.Buffer.Text += comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString()+"\n";
+					return;
+				} else {
+					consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Invalid Expression(Visible Func)\n");
+					return;
+				}
 			}
 
-
+				
+				//==================================================//
 			//================//
 
 		}
@@ -261,7 +257,7 @@ namespace uLOLCODEv2
 					//symbolTable [line] = inputVALUE;
 
 					evalINPUT (line,inputVALUE,symbolTable);
-
+					
 					//Append it to the "console"
 					consoleText.Buffer.Text += inputVALUE+"\n";
 					//update the symbolTable after input.
@@ -595,6 +591,44 @@ namespace uLOLCODEv2
 			}
 
 			symbolTable[variable] = "\"" + value + "\"";
+
+		}
+		public void fixVISIBLE(String value,TextView consoleText){
+			String handler;
+			String toPrint = "";
+			Match m = Regex.Match (value, @"^\-?\d*\.\d+\s*");
+			if (m.Success) {
+				handler = m.Value;
+				consoleText.Buffer.Text += (handler+"\n");
+				return;
+			}
+
+			m = Regex.Match (value, @"^\-?\d+\s*");
+			if (m.Success) {
+				handler = m.Value;
+				consoleText.Buffer.Text += (handler+"\n");
+				return;
+			}
+
+			m = Regex.Match (value, @"^\s*""");
+			if (m.Success) {
+				handler = m.Value;
+
+				for (var i=0; i<handler.Length; i++) {
+					if (i == 0 || i == handler.Length - 1) {
+						continue;
+					} else {
+						toPrint += handler[i];
+					}
+				}
+				consoleText.Buffer.Text += (toPrint + "\n");
+				return;
+			}
+
+			//IF NOT A STRING OR A NUMBR
+			//JUST PRINT;
+
+			consoleText.Buffer.Text += (value+"\n");
 
 		}
 		/*
