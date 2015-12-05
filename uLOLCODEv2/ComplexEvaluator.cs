@@ -97,7 +97,19 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				//Number Literal
+				//Numbar Literal
+				m = Regex.Match (expression, @"\-?\d*\.\d+\s*$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					stack.Push (float.Parse(m.Value));
+					if (currTier > 0) {
+						mkTier[currTier]++;
+					}
+					continue;
+				}
+
+				//Numbr Literal
 				m = Regex.Match (expression, @"\-?\d+\s*$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -108,7 +120,6 @@ namespace uLOLCODEv2
 					}
 					continue;
 				}
-
 
 				m = Regex.Match (expression, @"AN$");
 				if (m.Success) {
@@ -122,9 +133,18 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
-					stack.Push (a + b);
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push (op1 + op2);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push (op1 + op2);
+					}
 					if (currTier > 0) {
 						mkTier[currTier]--;
 					}
@@ -135,11 +155,20 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
-					stack.Push (a - b);
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push (op1 - op2);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push (op1 - op2);
+					}
 					if (currTier > 0) {
-						mkTier[currTier]++;
+						mkTier[currTier]--;
 					}
 					continue;
 				}
@@ -148,9 +177,18 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
-					stack.Push (a * b);
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push (op1 * op2);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push (op1 * op2);
+					}
 					if (currTier > 0) {
 						mkTier[currTier]--;
 					}
@@ -161,12 +199,22 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
-					if (b == 0) {
+
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					if (b.Equals("0")) {
 						return "UNDEFINED";
 					}
-					stack.Push (a / b);
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push (op1 / op2);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push (op1 / op2);
+					}
 					if (currTier > 0) {
 						mkTier[currTier]--;
 					}
@@ -177,12 +225,21 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
-					if (b == 0) {
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					if (b.Equals("0")) {
 						return "UNDEFINED";
 					}
-					stack.Push (a % b);
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push (op1 % op2);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push (op1 % op2);
+					}
 					if (currTier > 0) {
 						mkTier[currTier]--;
 					}
@@ -193,10 +250,19 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
 
-					stack.Push ((a > b) ? a : b);
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push ((op1 > op2) ? op1 : op2);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push ((op1 > op2) ? op1 : op2);
+					}
 					if (currTier > 0) {
 						mkTier[currTier]--;
 					}
@@ -207,10 +273,18 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (int)stack.Pop ();
-					var b = (int)stack.Pop ();
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
 
-					stack.Push ((a > b) ? b : a);
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+						float op1 = float.Parse(a);
+						float op2 = float.Parse(b);
+						stack.Push ((op1 > op2) ? op2 : op1);
+					} else {
+						int op1 = Int32.Parse(a);
+						int op2 = Int32.Parse(b);
+						stack.Push ((op1 > op2) ? op2 : op1);
+					}
 					if (currTier > 0) {
 						mkTier[currTier]--;
 					}
@@ -266,7 +340,6 @@ namespace uLOLCODEv2
 
 				m = Regex.Match (expression, @"BOTH\s+SAEM$");
 				if (m.Success) {
-					consoleText.Buffer.Text += "Both saem Detected\n";
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					var a = stack.Pop ().ToString();
@@ -279,7 +352,6 @@ namespace uLOLCODEv2
 
 				m = Regex.Match (expression, @"DIFFRINT$");
 				if (m.Success) {
-					consoleText.Buffer.Text += "Diffrint Detected\n";
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					var a = stack.Pop ().ToString();
@@ -331,7 +403,7 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-				return "UNDEFINED2" + expression;
+				return "UNDEFINED2 " + expression;
 			}
 
 			String result = stack.Pop ().ToString();
