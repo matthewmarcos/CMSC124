@@ -374,6 +374,7 @@ namespace uLOLCODEv2
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexBoolean(expression, consoleText, symbolTable)) {
 					//symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
+					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 					return true;
 				} else {
 					return false;

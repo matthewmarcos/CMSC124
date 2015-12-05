@@ -35,20 +35,47 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					stack.Push (true);
+					stack.Push (false);
 					continue;
 				}
 
-				m = Regex.Match (expression, @"^[a-zA-Z][a-zA-z\d]*");
-				if (m.Success && symbolTable.ContainsKey(expression)) {
-					// If variable that exists in table
-					var myValue = (String)symbolTable[expression];
-					if(myValue.Equals("WIN")) {
-						stack.Push(true);						
-					} else if(myValue.Equals("FAIL")){
-						stack.Push(false);
+				m = Regex.Match (expression, @"[a-zA-Z][a-zA-z\d]*$");
+				if (m.Success && symbolTable.ContainsKey(m.Value)) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					consoleText.Buffer.Text += m.Value + " found!\n";
+
+					//Pushing variables.
+					String myValue = symbolTable[m.Value].ToString();
+					int number;
+					Boolean isNumeric = int.TryParse(expression, out number);
+
+					m = Regex.Match (myValue, @"\s*"".*""$");
+
+					if (isNumeric) { //Numbr 
+						stack.Push (number);
+					} else if (myValue.Equals ("WIN")) { //Troof 
+						stack.Push (true);						
+					} else if (myValue.Equals ("FAIL")) { //Troof 
+						stack.Push (false);
+					} else if (m.Success) { //Yarn 
+						stack.Push (m.Value);
+					} else {
+						//Int32.Parse((String)symbolTable[operations[i]])
 					}
+
+					continue;
 				}
+
+				m = Regex.Match (expression, @"\-?\d+\s*$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					stack.Push (Int32.Parse(m.Value));
+					continue;
+				}
+
+
 				m = Regex.Match (expression, @"AN$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -61,13 +88,128 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					//consoleText.Buffer.Text += expression + "\n";
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+					stack.Push (a + b);
 					continue;
 				}
 
+				m = Regex.Match (expression, @"DIFF\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+					stack.Push (a - b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"PRODUKT\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+					stack.Push (a * b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"QUOSHUNT\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+					if (b == 0) {
+						return "UNDEFINED!";
+					}
+					stack.Push (a / b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"MOD\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+					if (b == 0) {
+						return "UNDEFINED!";
+					}
+					stack.Push (a % b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"BIGGR\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+
+					stack.Push ((a > b) ? a : b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"SMALLR\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (int)stack.Pop ();
+					var b = (int)stack.Pop ();
+
+					stack.Push ((a > b) ? b : a);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"WON\s+OF\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (Boolean)stack.Pop ();
+					var b = (Boolean)stack.Pop ();
+
+					stack.Push ((a || b) && !(a && b));
+					continue;
+				}
+
+				m = Regex.Match (expression, @"EITHER\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (Boolean)stack.Pop ();
+					var b = (Boolean)stack.Pop ();
+
+					stack.Push (a || b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"BOTH\s+OF$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (Boolean)stack.Pop ();
+					var b = (Boolean)stack.Pop ();
+
+					stack.Push (a && b);
+					continue;
+				}
+
+			
+
+
 				break;
 			}
-			return "Yes!";
+
+			String result = stack.Pop ().ToString();
+			if (result.Equals ("True")) {
+				return "WIN";
+			} else if (result.Equals ("False")) {
+				return "FAIL";
+			} else {
+				return result;
+			}
+			//return stack.Pop ().ToString();
 		}
 
 
