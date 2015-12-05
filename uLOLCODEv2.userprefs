@@ -2,20 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/MainWindow.cs">
     <Files>
-      <File FileName="uLOLCODEv2/EvalClass.cs" Line="776" Column="35" />
-      <File FileName="uLOLCODEv2/ParserClass.cs" Line="18" Column="170" />
-      <File FileName="uLOLCODEv2/LexerClass.cs" Line="349" Column="5" />
-      <File FileName="uLOLCODEv2/MainWindow.cs" Line="108" Column="18" />
+      <File FileName="uLOLCODEv2/EvalClass.cs" Line="22" Column="7" />
+      <File FileName="uLOLCODEv2/MainWindow.cs" Line="111" Column="20" />
+      <File FileName="uLOLCODEv2/ParserClass.cs" Line="21" Column="17" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="uLOLCODEv2" expanded="True">
-            <Node name="MainWindow.cs" selected="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
