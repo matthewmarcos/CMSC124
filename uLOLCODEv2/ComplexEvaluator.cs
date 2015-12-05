@@ -10,7 +10,7 @@ namespace uLOLCODEv2
 	public class ComplexEvaluator
 	{
 		public ComplexEvaluator ()
-		{	
+		{
 		}
 
 		public String removeQuotes(String expression) {

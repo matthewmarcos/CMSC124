@@ -5,6 +5,7 @@ namespace uLOLCODEv2
 	public partial class Inputtr
 	{
 		private global::Gtk.Entry inputBox;
+		
 		private global::Gtk.Button buttonOk;
 
 		protected virtual void Build ()

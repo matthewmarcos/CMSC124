@@ -7,7 +7,6 @@ namespace uLOLCODEv2
 		public Inputtr ()
 		{	this.Title = "Input";
 			this.Build ();
-		
 		}
 
 		protected void inputSEND (object sender, EventArgs e)

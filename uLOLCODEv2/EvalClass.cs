@@ -243,21 +243,19 @@ namespace uLOLCODEv2
 		public void evalGimmeh(String line, Hashtable symbolTable,TextView consoleText,int lineNumber,Gtk.ListStore symbolTree){
 
 			//check variable "line"
-			//DECLARE AN INSTANCE OF Inputtr;
-			uLOLCODEv2.Inputtr box = new uLOLCODEv2.Inputtr ();
-
 
 			Match m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 			if(isValidVarident(line) && m.Success) {
 				//If wala sa symbol table
 				if(!symbolTable.ContainsKey(line)) {	//if wala pa sa symbol table
-
 					consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Variable undeclared(Gimmeh Func)\n");
-					return;
+
 				} else {
 					//IF NASA SYMBOL TABLE NA PRNT YUNG VALUE
 
+					uLOLCODEv2.Inputtr box = new uLOLCODEv2.Inputtr ();
 					//run dialog box
+					//DECLARE AN INSTANCE OF Inputtr;
 					box.Run ();
 					//get the input from the dialog box, passed to "inputVALUE"  of type global static string
 					symbolTable [line] = inputVALUE;
