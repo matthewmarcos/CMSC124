@@ -20,8 +20,8 @@ namespace uLOLCODEv2
 		public String evaluateComplexExpression(String exp, TextView consoleText, Hashtable symbolTable) {
 			Match m;
 			String expression = exp;
-			//List<String> operations = new List<String>();
 			Stack stack = new Stack ();
+			//Boolean[,] isInfiniteArity;
 
 			//consoleText.Buffer.Text += expression + "\n";
 
@@ -41,7 +41,7 @@ namespace uLOLCODEv2
 					expression = expression.Trim ();
 					stack.Push (false);
 					continue;
-				}
+				} 	
 
 				m = Regex.Match (expression, @"[a-zA-Z][a-zA-z\d]*$");
 				if (m.Success && symbolTable.ContainsKey(m.Value)) {
@@ -208,8 +208,8 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (Boolean)stack.Pop ();
-					var b = (Boolean)stack.Pop ();
+					var a = Convert.ToBoolean (stack.Pop ().ToString());
+					var b = Convert.ToBoolean (stack.Pop ().ToString());
 
 					stack.Push (a && b);
 					continue;
@@ -232,8 +232,8 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					var a = (String)stack.Pop ();
-					var b = (String)stack.Pop ();
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
 
 					//String literal
 					if (Regex.IsMatch (a, @"\s*"".*""$")) {
@@ -244,25 +244,17 @@ namespace uLOLCODEv2
 					if (Regex.IsMatch (b, @"\s*"".*""$")) {
 						b = removeQuotes (b);
 					}
-
-					//Number
-					//if (Regex.IsMatch (b,  @"\-?\d+\s*$")) {
-					//}
-									
+			
 					//consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
 					stack.Push ("\"" + a + b + "\"");
 					continue;
 				}
 
-
 				m = Regex.Match (expression, @"MKAY$");
 				if (m.Success) {
-					//Check if 
+					
 				
 				}
-
-			
-
 
 				break;
 			}
