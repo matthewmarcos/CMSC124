@@ -43,7 +43,6 @@ namespace uLOLCODEv2
 				if (m.Success && symbolTable.ContainsKey(m.Value)) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					consoleText.Buffer.Text += m.Value + " found!\n";
 
 					//Pushing variables.
 					String myValue = symbolTable[m.Value].ToString();
@@ -56,7 +55,7 @@ namespace uLOLCODEv2
 
 					if (isNumeric) { //Numbr 
 						stack.Push (number);
-					} else if (myValue.Equals ("WIN")) { //Troof 
+					} else if (myValue.Equals ("WIN")) { //Troof 						
 						stack.Push (true);						
 					} else if (myValue.Equals ("FAIL")) { //Troof 
 						stack.Push (false);

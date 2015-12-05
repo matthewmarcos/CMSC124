@@ -443,7 +443,7 @@ namespace uLOLCODEv2
 					break;
 				}
 			}
-			
+				
 
 			if(stack.Pop()) {
 				return "WIN";
@@ -451,7 +451,6 @@ namespace uLOLCODEv2
 				return "FAIL";
 			}
 
-			return "WIN";
 		} 
 
 
