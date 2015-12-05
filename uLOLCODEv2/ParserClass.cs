@@ -195,7 +195,7 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*NOT\s*");
 			if (m.Success) {
-								
+				it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();			
 			}
 
 			m = Regex.Match (line, @"^\s*ALL\s+OF\s*");

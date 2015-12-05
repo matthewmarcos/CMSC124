@@ -13,6 +13,10 @@ namespace uLOLCODEv2
 		{	
 		}
 
+		public String removeQuotes(String expression) {
+			return expression.Substring (1, expression.Length - 2);
+		}
+
 		public String evaluateComplexExpression(String exp, TextView consoleText, Hashtable symbolTable) {
 			Match m;
 			String expression = exp;
@@ -63,6 +67,14 @@ namespace uLOLCODEv2
 						stack.Push (m.Value);
 					} 
 
+					continue;
+				}
+
+				m = Regex.Match (expression, @"""([^""]*|)""$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					stack.Push (m.Value);
 					continue;
 				}
 
@@ -200,6 +212,19 @@ namespace uLOLCODEv2
 					var b = (Boolean)stack.Pop ();
 
 					stack.Push (a && b);
+					continue;
+				}
+
+				m = Regex.Match (expression, @"SMOOSH$");
+				if (m.Success) {
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = (String)stack.Pop ();
+					var b = (String)stack.Pop ();
+					a = removeQuotes (a);
+					b = removeQuotes (b);
+					consoleText.Buffer.Text += "a: " + a + " b: " + b + "\n";
+					stack.Push ('"' + a + b + '"');
 					continue;
 				}
 

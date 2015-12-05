@@ -364,7 +364,8 @@ namespace uLOLCODEv2
 			}
 
 			// Check if arithmetic operation
-			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)\s*");
+			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|
+			BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
 			if(m.Success) {
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexArithmetic(expression, consoleText, symbolTable)) {
@@ -376,18 +377,10 @@ namespace uLOLCODEv2
 				}
 			} 		
 
-			// Check if boolean expression
-			m = Regex.Match(expression, @"^\s*(BOTH\sOF\s*|EITHER\sOF\s*|WON\sOF\s*)\s*");
+			m = Regex.Match(expression, @"^\s*SMOOSH\s*");
 			if(m.Success) {
-				
-				//Check if complexArithmetic is valid or not
-				if(isValidComplexBoolean(expression, consoleText, symbolTable)) {
-					//symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
-					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
-					return true;
-				} else {
-					return false;
-				}
+				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				return true;
 			}
 
 			m = Regex.Match(expression, @"^\s*NOT\s*");
