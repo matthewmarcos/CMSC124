@@ -10,6 +10,8 @@ namespace uLOLCODEv2
 	public class EvalClass
 	{
 
+		ComplexEvaluator comp = new ComplexEvaluator();
+
 		public EvalClass ()
 		{
 		}
@@ -82,6 +84,7 @@ namespace uLOLCODEv2
 			if(expression.Length == 1) {
 				//I HAS A VAR
 				//consoleText.Buffer.Text += lines + "\n";
+
 				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 				if(isValidVarident(expression[0]) && m.Success) {
 					//Fix symbol table
@@ -97,6 +100,7 @@ namespace uLOLCODEv2
 			}
 			// ITZ ASSIGNMENT
 			if(expression.Length >= 3) {
+				//Assigning boolean to variable
 				m = Regex.Match (expression[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 				if(isValidVarident(expression[0]) && m.Success && expression[1].Equals("ITZ")) {
 					//Fix symbol table
@@ -321,6 +325,8 @@ namespace uLOLCODEv2
 
 		public Boolean evaluateComplex (ref Hashtable symbolTable,TextView consoleText, String key, String expression) {
 			//Expression is yung natira from I HAS A
+
+			//consoleText.Buffer.Text += "complex says: " + comp.ReturnHello() + "\n";
 			Match m;
 			char[] splitToken = {' '};
 			String[] words = expression.Split (splitToken);
@@ -353,7 +359,8 @@ namespace uLOLCODEv2
 			if(m.Success) {
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexArithmetic(expression, consoleText, symbolTable)) {
-					symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
+					//symbolTable [key] = evalComplexArithmetic(expression, consoleText, symbolTable).ToString();
+					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
 					return true;
 				} else {
 					return false;
@@ -366,10 +373,8 @@ namespace uLOLCODEv2
 				
 				//Check if complexArithmetic is valid or not
 				if(isValidComplexBoolean(expression, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += "Valid boolean \n";
-					symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
+					//symbolTable[key] = evalComplexBoolean(expression, consoleText, symbolTable);
 					return true;
-
 				} else {
 					return false;
 				}

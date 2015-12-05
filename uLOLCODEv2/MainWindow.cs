@@ -83,7 +83,7 @@ public partial class MainWindow: Gtk.Window
 		consoleText.Buffer.Text = "";
 		String code = inputCode.Buffer.Text;
 		Boolean isComment = false;
-	//	String[,] codeLabels;
+
 		lexModel.Clear ();
 		symbolTree.Clear ();
 		symbolTable.Clear ();
@@ -94,8 +94,6 @@ public partial class MainWindow: Gtk.Window
 		if(!eval.hasValidStartAndEnd(lines)) {
 			consoleText.Buffer.Text += "Syntax Error at program delimiter\n";
 		} 
-
-		consoleText.Buffer.Text += "ComplexEvaluator says: " + test.HelloReturner() + "\n";
 
 		for(var i = 0 ; i < lines.Length ; i++) {
 			lexer.parseLines(lines[i], ref isComment, i, ref lexModel, ref symbolTree, consoleText);
