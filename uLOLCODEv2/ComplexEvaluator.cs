@@ -20,8 +20,8 @@ namespace uLOLCODEv2
 		public String evaluateComplexExpression(String exp, TextView consoleText, Hashtable symbolTable) {
 			Match m;
 			String expression = exp;
-			//List<String> operations = new List<String>();
 			Stack stack = new Stack ();
+			Boolean[,] isInfiniteArity;
 
 			//consoleText.Buffer.Text += expression + "\n";
 
@@ -215,6 +215,19 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+
+				m = Regex.Match (expression, @"BOTH\s+SAEM$");
+				if (m.Success) {
+					consoleText.Buffer.Text += "Both saem Detected\n";
+					expression = expression.Remove (m.Index, m.Value.Length);
+					expression = expression.Trim ();
+					var a = stack.Pop ().ToString();
+					var b = stack.Pop ().ToString();
+
+					stack.Push (a == b);
+					continue;
+				}
+
 				m = Regex.Match (expression, @"SMOOSH$");
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -241,6 +254,13 @@ namespace uLOLCODEv2
 					continue;
 				}
 
+
+				m = Regex.Match (expression, @"MKAY$");
+				if (m.Success) {
+					
+				
+				}
+
 			
 
 
@@ -257,7 +277,6 @@ namespace uLOLCODEv2
 			}
 			//return stack.Pop ().ToString();
 		}
-
 
 
 	}

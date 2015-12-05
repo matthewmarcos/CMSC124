@@ -104,40 +104,7 @@ public partial class MainWindow: Gtk.Window
 		}
 
 	}
-
-
-
-	/*
-		TO-DO:
-			separate getting of lexemes only. NO SYMBOL TABLE
-			2nd run: Initialize IT into symbol table ^ w/o appendValues
-
-	*/
-
-
-	/*
-	 * 
-	 * Implementation which returns the type of statement so we know how to eval
-	void parseLines (String code){
-		char[] splitToken = {'\n'};
-		String[] lines = code.Split (splitToken);
-
-		for(var i = 0 ; i < lines.Length ; i++) {
-			//String[,] statements = ident.getLineType(lines[i], consoleText);
-			List<List<String>> statements = ident.getLineType(lines[i], consoleText);
-			//foreach(List<String> myList in )
-			//consoleText.Buffer.Text +=  statements.Count;
-			//for(var j = 0 ; j < statements.Count ; j++) {
-				//if(statements[j, 1].Equals("varDecNoInit")) {
-					//eval.varDecNoInit(consoleText, statements[j, 0]);
-					//consoleText.Buffer.Text +=  statements[j, 0];
-				//}
-				//consoleText.Buffer.Text +=  statements.ElementAt(0);
-			//	lexModel.AppendValues("WWW", "WWWE");
-			//}
-		}
-	}*/
-
+		
 	protected void updateSymbolTable() {
 		symbolTree.Clear ();
 		foreach(DictionaryEntry pair in symbolTable) {
