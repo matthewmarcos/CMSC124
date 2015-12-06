@@ -343,6 +343,13 @@ namespace uLOLCODEv2
 					eval.varAssignEval (variable, line, ref symbolTable, consoleText, lineNumber);
 				}
 			}
+			m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*");
+			if (m.Success) {
+				String something = m.Value;
+				if (symbolTable.ContainsKey (something)) {
+					symbolTable ["IT"] = symbolTable[something];
+				}
+			}
 
 			m = Regex.Match (line, @"^\s*""");
 			if (m.Success) {

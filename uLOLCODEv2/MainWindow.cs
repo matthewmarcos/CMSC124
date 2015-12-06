@@ -123,7 +123,7 @@ public partial class MainWindow: Gtk.Window
 	{
 		FileChooserDialog fileOpen = new FileChooserDialog ("Open File",this,FileChooserAction.Open,
 		                                                    "Cancel", ResponseType.Cancel,"Open", ResponseType.Accept);		//for open button 
-
+		//fileOpen.AddFilter ("LOLCODE (.lol)|*.lol|All Files (*.*)|*.*"); 
 		if( fileOpen.Run() == (int)ResponseType.Accept){
 			//open file for reading
 			System.IO.StreamReader file = System.IO.File.OpenText(fileOpen.Filename);
