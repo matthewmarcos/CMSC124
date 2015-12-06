@@ -141,12 +141,7 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*BOTH\s+OF\s*");
 			if (m.Success) {
-				line = line.Trim ();
-				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
-					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
-				}
-				consoleText.Buffer.Text += "IT: " + it + "\n";
+
 			}
 
 			m = Regex.Match (line, @"^\s*EITHER\s+OF\s*");
@@ -187,7 +182,13 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*BOTH\s+SAEM\s*");
 			if (m.Success) {
-				
+				line = line.Trim ();
+				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
+					//it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+				}
+				consoleText.Buffer.Text += "IT: " + it + "\n";
+		
 			}
 
 			m = Regex.Match (line, @"^\s*DIFFRINT\s*");
