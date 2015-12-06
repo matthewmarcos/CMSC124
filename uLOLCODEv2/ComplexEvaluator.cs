@@ -119,8 +119,6 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					consoleText.Buffer.Text += "A: " + a + "\n";
-					consoleText.Buffer.Text += "B: " + b + "\n";
 					float op1 = float.Parse(a);
 					float op2 = float.Parse(b);
 					stack.Push (op1 + op2);
@@ -416,13 +414,12 @@ namespace uLOLCODEv2
 			}//End of main loop
 
 			String result = stack.Pop ().ToString();
-			consoleText.Buffer.Text += "Result: " + result + "\n";
 			if (result.Equals ("True")) {
 				return "WIN";
 			} else if (result.Equals ("False")) {
 				return "FAIL";
 			} else {
-				return "5";
+				return result;
 			}
 		}
 	}//End of ComplexEvaluatorClass
