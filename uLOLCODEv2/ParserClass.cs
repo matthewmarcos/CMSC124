@@ -65,20 +65,22 @@ namespace uLOLCODEv2
 			m = Regex.Match (line, @"^\s*SUM\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
-				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+				if (eval.isValidComplexArithmetic (line, consoleText, symbolTable)) {
+					it = comp.evaluateComplexExpression (line, consoleText, symbolTable).ToString ();
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
+					consoleText.Buffer.Text += "IT: " + it + "\n";
+				} else {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (SUM OF)\n";
 				}
-				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
 			}
 
 			m = Regex.Match (line, @"^\s*DIFF\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
-				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+				if (eval.isValidComplexArithmetic (line, consoleText, symbolTable)) {
+					it = comp.evaluateComplexExpression (line, consoleText, symbolTable).ToString ();
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -89,7 +91,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -100,7 +102,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;				
@@ -111,7 +113,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -122,7 +124,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -133,7 +135,7 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
@@ -141,7 +143,14 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*BOTH\s+OF\s*");
 			if (m.Success) {
-
+				line = line.Trim ();
+				if (eval.isValidComplexBoolean (line, consoleText, symbolTable)) {
+					it = comp.evaluateComplexExpression (line, consoleText, symbolTable).ToString ();
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
+					consoleText.Buffer.Text += "IT: " + it + "\n";
+				} else {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (BOTH OF)\n";
+				}
 			}
 
 			m = Regex.Match (line, @"^\s*EITHER\s+OF\s*");
@@ -149,9 +158,11 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
+					consoleText.Buffer.Text += "IT: " + it + "\n";
+				} else {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (EITHER OF)\n";
 				}
-				consoleText.Buffer.Text += "IT: " + it + "\n";
 			}
 
 			m = Regex.Match (line, @"^\s*WON\s+OF\s*");
@@ -159,15 +170,17 @@ namespace uLOLCODEv2
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
+					consoleText.Buffer.Text += "IT: " + it + "\n";
+				} else {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (WON OF)\n";
 				}
-				consoleText.Buffer.Text += "IT: " + it + "\n";
 			}
 
 			m = Regex.Match (line, @"^\s*NOT\s*");
 			if (m.Success) {
 				it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();		
-				eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
+				eval.evaluateComplex (ref symbolTable, consoleText, "IT", it, lineNumber);
 			}
 
 			m = Regex.Match (line, @"^\s*ALL\s+OF\s*");
@@ -183,13 +196,15 @@ namespace uLOLCODEv2
 			m = Regex.Match (line, @"^\s*BOTH\s+SAEM\s*");
 			if (m.Success) {
 				line = line.Trim ();
+
 				//line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
 				//if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					//it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", line);
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", line,lineNumber);
 				//}
+
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 		
 			}
@@ -206,7 +221,21 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*MAEK\s*");
 			if (m.Success) {
-								
+				line = line.Remove (0, m.Value.Length);
+				line = line.Trim();
+				//MAEK <expression> [A] <type>
+				//get the type and the variable to put it in
+				// evaluate expression
+				// typecast with eval.evalMAEK(input, type, lineNumber, ref symbolTable, consoleText);
+				// update source with the value
+
+				String[] inputs = Regex.Split(line, @"\s+A\s+");
+				m = Regex.Match (inputs[0], @"[a-zA-Z][a-zA-z\d]*$");
+				if (m.Success && symbolTable.ContainsKey(m.Value)) {
+					inputs [0] = symbolTable [m.Value].ToString ();
+					symbolTable [m.Value] = eval.evalMAEK(inputs[0].Trim(), inputs[1].Trim(), lineNumber, ref symbolTable, consoleText);
+				}
+					
 			}
 
 			m = Regex.Match (line, @"^A\s*");
@@ -329,7 +358,7 @@ namespace uLOLCODEv2
 					line = line.Remove(0, 1);
 				} else {
 					//ERROR -> unpaired quotation mark
-					consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "! (unpaired quotes)\n";
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + ", Unpaired quotes!\n";
 				}
 			}
 

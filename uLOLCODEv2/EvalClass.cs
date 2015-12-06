@@ -64,12 +64,12 @@ namespace uLOLCODEv2
 		public Boolean varAssignEval(String variable, String lines, ref Hashtable symbolTable, TextView consoleText, int lineNumber) {
 			// Check if variable is in symbol Table
 			if(!symbolTable.ContainsKey(variable)) {
-				consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + ": " + variable + " not declared!\n";
+				consoleText.Buffer.Text += "Expected error at line " + lineNumber + ", undeclared variable " + variable + "!\n";
 				return false;
 			} else {
-				if(!evaluateComplex(ref symbolTable, consoleText, variable, lines)) {
-					consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
-					": variable " + lines + " is invalid!\n";
+				if(!evaluateComplex(ref symbolTable, consoleText, variable, lines, lineNumber)) {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber +
+					", invalid variable " + lines + "!\n";
 					return false;
 				}
 				return true;
@@ -90,7 +90,7 @@ namespace uLOLCODEv2
 						symbolTable.Add(expression[0], "NOOB");
 						return;
 					} else {
-						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
+						consoleText.Buffer.Text += "Expected error at line " + lineNumber +
 							": variable " + expression[0] + " is already used!\n";
 							return;
 					}
@@ -106,19 +106,19 @@ namespace uLOLCODEv2
 						expression = Regex.Split(lines, @"\s+ITZ\s+");
 						//Evaluate the expression[1] if expression is a string,
 						// or complexExpression that is valid. Already evaluate it lang. plz.
-						if(!evaluateComplex(ref symbolTable, consoleText, expression[0], expression[1])) {
-							consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
-							": variable " + expression[1] + " is invalid!\n";
+						if(!evaluateComplex(ref symbolTable, consoleText, expression[0], expression[1], lineNumber)) {
+							consoleText.Buffer.Text += "Expected error at line " + lineNumber +
+							", invalid variable " + expression[1] + "!\n";
 						}
 						return;
 					} else {
-						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber +
-							": variable " + expression[0] + " is already used!\n";
+						consoleText.Buffer.Text += "Expected error at line " + lineNumber +
+							", variable " + expression[0] + " is already used!\n";
 						return;
 					}
 				}
 			}
-			consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "!\n";
+			consoleText.Buffer.Text += "Expected error at line " + lineNumber + "!\n";
 		}
 
 		public void evalVisible(String line, Hashtable symbolTable, TextView consoleText, int lineNumber) {
@@ -139,7 +139,7 @@ namespace uLOLCODEv2
 						stringLiteral += sline [i];
 						//line = line.Remove (i, 1);
 						i++;					
-					}
+					} 
 
 					if (sline [i].Equals ('"')) {
 						
@@ -161,10 +161,16 @@ namespace uLOLCODEv2
 						evalVisible (sline, symbolTable, consoleText, lineNumber);
 					}
 
-			}
+				}
 				//=======End of String Literal Eval ============//
 
 				//==================VARIABLE==========================//
+				m = Regex.Match (line, @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
+				if(isValidVarident(line) && m.Success) {
+						//If wala sa symbol table
+					if(!symbolTable.ContainsKey(line)) {
+						consoleText.Buffer.Text += ("Expected error at line " + lineNumber + ", Variable undeclared! (Visible Func)\n");
+				}
 				m = Regex.Match (holder[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
 				if(isValidVarident(holder[0]) && m.Success) {
 				String stringLine = "";
@@ -172,7 +178,7 @@ namespace uLOLCODEv2
 				//If wala sa symbol table
 					
 					if(!symbolTable.ContainsKey(holder[0])) {
-						consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Variable undeclared(Visible Func)\n");
+						consoleText.Buffer.Text += ("Expected error at line " + lineNumber + ": Variable undeclared(Visible Func)\n");
 						return;
 					} else {
 							//IF NASA SYMBOL TABLE NA PRINT YUNG VALUE
@@ -194,6 +200,7 @@ namespace uLOLCODEv2
 						
 					}
 				}
+			}
 				//==================END OF VAR EVAL=====================//
 			
 				//==================Numbar Literal =====================//
@@ -227,7 +234,7 @@ namespace uLOLCODEv2
 					consoleText.Buffer.Text += comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString()+"\n";
 					return;
 				} else {
-					consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Invalid Expression(Visible Func)\n");
+					consoleText.Buffer.Text += ("Expected error at line " + lineNumber + ", Invalid Expression (Visible Func)\n");
 					return;
 				}
 			}
@@ -239,7 +246,7 @@ namespace uLOLCODEv2
 			if(isValidVarident(line) && m.Success) {
 				//If wala sa symbol table
 				if(!symbolTable.ContainsKey(line)) {
-					consoleText.Buffer.Text += ("Syntax Error at line " + lineNumber + ": Variable undeclared(Gimmeh Func)\n");
+					consoleText.Buffer.Text += ("Expected error at line " + lineNumber + ", Variable undeclared (Gimmeh Func)\n");
 
 				} else {
 					uLOLCODEv2.Inputtr box = new uLOLCODEv2.Inputtr ();
@@ -273,7 +280,7 @@ namespace uLOLCODEv2
 			}
 		}
 
-		public Boolean evaluateComplex (ref Hashtable symbolTable,TextView consoleText, String key, String expression) {
+		public Boolean evaluateComplex (ref Hashtable symbolTable,TextView consoleText, String key, String expression, int lineNumber) {
 			//Expression is yung natira from I HAS A
 			Match m;
 			char[] splitToken = {' '};
@@ -298,7 +305,7 @@ namespace uLOLCODEv2
 						symbolTable [key] = symbolTable [expression];
 						return true;
 					} else {
-						consoleText.Buffer.Text += "Error: undeclared variable!\n";
+						consoleText.Buffer.Text += "Expected error at line " + lineNumber + "\n";
 						return false;
 					}
 				} 
@@ -311,12 +318,35 @@ namespace uLOLCODEv2
 				return true;
 			}
 
-			// Check if arithmetic, boolean, infinite arity operation.
-			m = Regex.Match(expression, @"^\s*(DIFFRINT\s*|SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*|BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*|BOTH\s+SAEM\s*|ALL\s+OF\s*|ANY\s+OF)\s*");
+			// Check if boolean
+			m = Regex.Match(expression, @"^\s*(BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*)\s*");
+			if(m.Success) {
+				if (isValidComplexBoolean (expression, consoleText, symbolTable)) {
+					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				} else {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (invalid bool expression)\n";
+				}
+				return true;
+			}
+
+			// Check if arithmetic
+			m = Regex.Match(expression, @"^\s*(SUM\s+OF\s*|DIFF\s+OF\s*|PRODUKT\s+OF\s*|QUOSHUNT\s+OF\s*|MOD\s+OF\s*|BIGGR\s+OF\s*|SMALLR\s+OF\s*)\s*");
+			if(m.Success) {
+				if (isValidComplexArithmetic (expression, consoleText, symbolTable)) {
+					symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				} else {
+					consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (invalid arith expression)\n";
+				}
+				return true;
+			}
+
+			// Check if equality/infinite arity
+			m = Regex.Match(expression, @"^\s*(BOTH\s+SAEM\s*|DIFFRINT\s*|ALL\s+OF\s*|ANY\s+OF\s*)");
 			if(m.Success) {
 				symbolTable [key] = comp.evaluateComplexExpression(expression, consoleText, symbolTable).ToString();
+				//consoleText.Buffer.Text += "Expected error at line " + lineNumber + "! (invalid equality expression)\n";
 				return true;
-			} 		
+			}
 
 			m = Regex.Match(expression, @"^\s*SMOOSH\s*");
 			if(m.Success) {
@@ -334,70 +364,16 @@ namespace uLOLCODEv2
 			return false;
 		}
 
-		public String evalComplexBoolean (String expression, TextView consoleText, Hashtable symbolTable) {			
-			String splitToken = "[ ]";
-			String[] temp = Regex.Split (expression, splitToken);
-			List<String> operations = new List<String>();
-			var stack = new Stack<Boolean> ();
-		
-			for(var i = 0; i < temp.Length ; i++) {
-				temp[i] = temp[i].Trim();
-				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
-					operations.Add(temp[i]);
-				}
-			}         
-            // Solving the postfix expression
-			for(int i = operations.Count-1 ; i >= 0 ; i--) {
-				if(Regex.IsMatch(operations[i], @"^WIN$")) {
-					stack.Push(true);
-				} else if (Regex.IsMatch(operations[i],@"^FAIL$")) {
-					// If variable that exists in table
-					stack.Push(false);
-				} else if (Regex.IsMatch(operations[i], @"^[a-zA-Z][a-zA-z\d]*") && 
-					symbolTable.ContainsKey(operations[i])) {
-					// If variable that exists in table
-					var myValue = (String)symbolTable[operations[i]];
-					if(myValue.Equals("WIN")) {
-						stack.Push(true);						
-					} else if(myValue.Equals("FAIL")){
-						stack.Push(false);
-					}
-				} else if (operations[i].Equals("BOTH")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push(a && b);
-				} else if (operations[i].Equals("EITHER")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push(a || b);
-				} else if (operations[i].Equals("WON")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push((a || b) && !(a && b));
-				} else {
-					// May error. Consult Mon how to handle.
-					break;
-				}
-			}
-
-			if(stack.Pop()) {
-				return "WIN";
-			} else {
-				return "FAIL";
-			}
-
-		} 
-
 		public Boolean isValidComplexBoolean(String expression, TextView consoleText, Hashtable symbolTable) {
 			// Check for underflows and overflows
-			var operators = 0;
-			var operands = 0;
+			float operators = 0;
+			float operands = 0;
 			while(expression != "") {
 				Match m = Regex.Match(expression, @"^\s*(BOTH\s+OF\s*|EITHER\s+OF\s*|WON\s+OF\s*)");
 				if(m.Success) {
 					expression = expression.Remove(0, m.Value.Length);
 					expression = expression.Trim();
-					operators+=1;
+					operators += 0.5f;
 					continue;
 				}
 
@@ -405,25 +381,32 @@ namespace uLOLCODEv2
 				if(m.Success) {
 					expression = expression.Remove(0, m.Value.Length);
 					expression = expression.Trim();
-					operands+=1;
+					operands += 1f;
 					continue;
 				}
 
-				//disregard AN
 				m = Regex.Match(expression, @"^\s*AN\s*");
 				if(m.Success) {
 					expression = expression.Remove(0, m.Value.Length);
 					expression = expression.Trim();
+					operators += 0.5f;
 					continue;
 				}
 
 				m = Regex.Match(expression, @"^[a-zA-Z][a-zA-z\d]*");
 				if(m.Success) {
-					expression = expression.Remove(0, m.Value.Length);
-					expression = expression.Trim();
-					operands+=1;
-					continue;
+					if (isValidVarident (m.Value)) {
+						expression = expression.Remove (0, m.Value.Length);
+						expression = expression.Trim ();
+						operands += 1f;
+						continue;
+					}
 				}
+
+				//consoleText.Buffer.Text += "Operands: " + operands + "\n";
+				//consoleText.Buffer.Text += "Operators: " + operators + "\n";
+				//if none of the options above are correct, error
+				return false;
 			}	
 
 			if(operands - 1 == operators) {
@@ -434,99 +417,48 @@ namespace uLOLCODEv2
 		}
 
 		public Boolean isValidComplexArithmetic(String expression, TextView consoleText, Hashtable symbolTable) {
-			String splitToken = "[ ]";
-			String[] temp = Regex.Split (expression, splitToken);
-			List<String> operations = new List<String>();
+			String[] tokens = Regex.Split (expression, @"[ ]");
+			List<String> operations = new List<String> ();
 
-			var operators = 0;
-			var operands = 0;
-			for(var i = 0; i < temp.Length ; i++) {
-				temp[i] = temp[i].Trim();
-				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
-					operations.Add(temp[i]);
-				}
-			}  
+			float operators = 0;
+			float operands = 0;
+			for(var i = 0; i < tokens.Length ; i+=1) {
+				tokens [i] = tokens [i].Trim ();
+				if (!(tokens [i].Equals ("AN"))) {
+					if (tokens [i].Equals ("WIN") || tokens [i].Equals ("FAIL")) {
 
-			foreach(String operation in operations) {
-				if(operation.Equals("DIFF") ||
-					operation.Equals("SUM") ||
-					operation.Equals("PRODUKT") ||
-					operation.Equals("QUOSHUNT") ||
-					operation.Equals("MOD") ||
-					operation.Equals("BIGGR") ||
-					operation.Equals("SMALLR")) {
-					operators++;
+					} else {
+						operations.Add (tokens [i]);
+					}
 				} else {
-					operands++;
+					if(tokens[i].Equals("AN")) {
+						operators += 0.5f;
+					}
 				}
 			}
-			if(operands - 1 == operators) {
+
+			foreach(String operation in operations) {
+				if (operation.Equals ("SUM") ||
+					operation.Equals ("DIFF") ||
+					operation.Equals ("PRODUKT") ||
+					operation.Equals ("QUOSHUNT") ||
+					operation.Equals ("MOD") ||
+					operation.Equals ("BIGGR") ||
+					operation.Equals ("SMALLR") ||
+				    operation.Equals ("OF")) {
+					operators += 0.25f;
+				} else {
+					operands += 1f;
+				}
+			}
+
+			//consoleText.Buffer.Text += "Operands: " + operands + "\n";
+			//consoleText.Buffer.Text += "Operators: " + operators + "\n";
+			if (operands - 1 == operators) {
 				return true;
 			} else {
 				return false;	
 			}
-		}
-
-		public int evalComplexArithmetic (String expression, TextView consoleText, Hashtable symbolTable) {			
-			String splitToken = "[ ]";
-			String[] temp = Regex.Split (expression, splitToken);
-			List<String> operations = new List<String>();
-			var stack = new Stack<int> ();
-		
-			for(var i = 0; i < temp.Length ; i++) {
-				temp[i] = temp[i].Trim();
-				if(!(temp[i].Equals("AN") || temp[i].Equals("OF"))) {
-					operations.Add(temp[i]);
-				}
-			}         
-            // Solving the postfix expression
-			for(int i = operations.Count-1 ; i >= 0 ; i--) {
-				int number;
-				Boolean isNumeric = int.TryParse(operations[i], out number);
-				if(isNumeric) {
-					stack.Push(number);
-				} else if (Regex.IsMatch(operations[i], @"^[a-zA-Z][a-zA-z\d]*") && 
-					symbolTable.ContainsKey(operations[i])) {
-					// If variable that exists in table
-					stack.Push(Int32.Parse((String)symbolTable[operations[i]]));
-				} else if (operations[i].Equals("SUM")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push(a + b);
-				} else if (operations[i].Equals("DIFF")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push(a - b);
-				} else if (operations[i].Equals("PRODUKT")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push(a * b);
-				} else if (operations[i].Equals("QUOSHUNT")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					// consoleText.Buffer.Text += (a+b) + '\n';
-					// if b == 0, exit
-					stack.Push(a / b);
-				} else if (operations[i].Equals("MOD")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push(a % b);
-				} else if (operations[i].Equals("BIGGR")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push((a > b) ? a : b);
-				} else if (operations[i].Equals("SMALLR")) {
-					var a = stack.Pop ();
-					var b = stack.Pop ();
-					stack.Push((a > b) ? b : a);
-				} else {
-					// May error. Consult Mon how to handle.
-					break;
-				}
-			}
-
-			var res = stack.Pop();
-			return res;
 		}
 
 		public Boolean validNumber(String number) {
@@ -589,7 +521,73 @@ namespace uLOLCODEv2
 			//if not a string, numbar, or number, just print it
 			consoleText.Buffer.Text += (value+"\n");
 		}
+
+
+
+
+		public String evalMAEK(String input, String type, int lineNumber, ref Hashtable symbolTable, TextView consoleText){
+
+			//Check if the type is valid
+			if (!(type.Equals ("TROOF") || type.Equals ("YARN") || type.Equals ("NUMBR") || type.Equals ("NUMBAR") || type.Equals ("NOOB"))) {
+				consoleText.Buffer.Text += "Syntax error at line: " + lineNumber + ". " + type + " is undefinded\n";
+				return "UNDEFINED";
+			}
+			//Return value based on type requested
+			switch (type) {
+			case "TROOF":
+				{
+					//String literal no content
+					if (Regex.IsMatch (input, @"\s*^""""$")) {
+						return "FAIL";
+					} else if (Regex.IsMatch (input, @"\s*^""\.+""$")) { //string literal with content
+						return "WIN";
+					} else if (Regex.IsMatch (input, @"^\-?[0]*.?[0]+\s*")) { // IF 0
+						return "FAIL";
+					} else {
+						return "WIN";
+					}
+				}
+			case "YARN":
+				{
+					//If yarn literal already
+					if (Regex.IsMatch (input, @"\s*^""\.""$")) {
+						//Do not modify
+						return input;
+					} else {
+						//Add quotes and return
+						return "\"" + input + "\"";
+					}
+				}
+			case "NOOB":
+				{
+					return "NOOB";
+				}
+			case "NUMBR":
+				{
+					//consoleText.Buffer.Text += "to Numbr";
+					if (Regex.IsMatch (input, @"^"".*""$")) {
+						consoleText.Buffer.Text += "String to Numbr";
+						input = comp.removeQuotes (input);
+						int answer;
+						Boolean isInteger = Int32.TryParse (input, out answer);
+						if (isInteger) {
+							return answer.ToString ();
+						}
+						return "BAWAL ITO.";
+					}
+					return (input.Equals ("WIN") ? "1" : "0");
+				}
+			case "NUMBAR":
+				{
+					input = comp.removeQuotes (input);
+					return input;
+				}
+			}
+			return "UNDEFINED";
+		}
+
 		//EVAL ORLY!!!!
+
 		public void evalORLY(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
 			/*IF ORLY IS DETECTED
 			 * CHECK VALUE OF IT
@@ -615,7 +613,7 @@ namespace uLOLCODEv2
 			//if no OIC dected, throw error and return;
 			//if OIC detected, then gogogogo
 			if (!paired) {
-				consoleText.Buffer.Text += "Syntax Error: OIC expected\n";
+				consoleText.Buffer.Text += "Expected Error at line " + lineNumber + ", OIC expected\n";
 				return;
 			} else {
 				evaluateConditions (codes,lineNumber,symbolTable,consoleText);
@@ -840,7 +838,7 @@ namespace uLOLCODEv2
 						//IF NO VALUE WAS MATCHED HEHEHEHE!!!
 						MainWindow.detectedOIC = true;
 						MainWindow.newIndex = j;
-						consoleText.Buffer.Text += "EVERYTHING IS DONE\n";
+						
 						break;
 
 				}
