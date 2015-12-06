@@ -1,12 +1,12 @@
-﻿<Properties>
+﻿<Properties StartupItem="uLOLCODEv2\uLOLCODEv2.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2/ParserClass.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="uLOLCODEv2\EvalClass.cs">
     <Files>
-      <File FileName="uLOLCODEv2/ComplexEvaluator.cs" Line="1" Column="1" />
-      <File FileName="uLOLCODEv2/EvalClass.cs" Line="1" Column="1" />
-      <File FileName="uLOLCODEv2/ParserClass.cs" Line="202" Column="6" />
-      <File FileName="uLOLCODEv2/LexerClass.cs" Line="1" Column="1" />
-      <File FileName="uLOLCODEv2/MainWindow.cs" Line="1" Column="1" />
+      <File FileName="uLOLCODEv2\ComplexEvaluator.cs" Line="65" Column="45" />
+      <File FileName="uLOLCODEv2\EvalClass.cs" Line="543" Column="6" />
+      <File FileName="uLOLCODEv2\ParserClass.cs" Line="349" Column="45" />
+      <File FileName="uLOLCODEv2\LexerClass.cs" Line="23" Column="16" />
+      <File FileName="uLOLCODEv2\MainWindow.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
