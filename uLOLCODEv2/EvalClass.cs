@@ -533,7 +533,7 @@ namespace uLOLCODEv2
 			Match m =  Regex.Match (number, @"^\-?\d*\.?\d+\s*");
 			return m.Success;
 		}
-
+		//YES
 		public void evalINPUT (String variable, String value, Hashtable symbolTable){
 			//EVALUATE THE GIVEN VALUE;
 			//if numbar literal
@@ -553,7 +553,7 @@ namespace uLOLCODEv2
 			//if string literal
 			symbolTable[variable] = "\"" + value + "\"";
 
-		}
+		}//VISIBLE OPTIMIZER
 		public void fixVISIBLE(String value,TextView consoleText){
 			String handler;
 			String toPrint = "";
@@ -589,7 +589,7 @@ namespace uLOLCODEv2
 			//if not a string, numbar, or number, just print it
 			consoleText.Buffer.Text += (value+"\n");
 		}
-
+		//EVAL ORLY!!!!
 		public void evalORLY(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
 			/*IF ORLY IS DETECTED
 			 * CHECK VALUE OF IT
@@ -621,9 +621,10 @@ namespace uLOLCODEv2
 				evaluateConditions (codes,lineNumber,symbolTable,consoleText);
 			}
 		}
-
+		//FOR CONDITIONAL
 		public void evaluateConditions(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
 			String value = symbolTable ["IT"].ToString();
+
 			int i = lineNumber;
 			int j;
 			Boolean isComment = false;
@@ -675,7 +676,6 @@ namespace uLOLCODEv2
 						Match q = Regex.Match (codes [j], @"^\s*NO\s+WAI\s*");
 						Match r = Regex.Match (codes[j], @"^\s*O\s+RLY\?\s*$");
 						if (n.Success || o.Success || p.Success || q.Success || r.Success) {
-							consoleText.Buffer.Text += "STOP!\n";
 							i = j;
 							break;
 						} else {
@@ -723,6 +723,129 @@ namespace uLOLCODEv2
 					break;
 				}
 			}
-		}//End of EvalClass
+		}
+		//FOR SWITCH CASES
+		public void evalWTF(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
+			//if naka detect siya ng WTF, check VAR before and transfer to IT.
+			Boolean paired = false;
+			int i = lineNumber;
+			for (; i<codes.Length; i++) {
+				Match m = Regex.Match (codes [i], @"^\s*OIC\s*$");
+				if (m.Success) {
+					paired = true;
+					break;
+				} else {
+					continue;
+				}
+
+			}
+			//if after the loop, paired is still false, then there was no OIC detected;
+			//if no OIC dected, throw error and return;
+			//if OIC detected, then gogogogo
+			if (!paired) {
+				consoleText.Buffer.Text += "Syntax Error: OIC expected\n";
+				return;
+			} else {
+				evaluateCASES (codes,lineNumber,symbolTable,consoleText);
+			}
+		}
+		//SWITCH CASES FNCTION
+		public void evaluateCASES(String[] codes,int lineNumber, Hashtable symbolTable, TextView consoleText){
+			//get value of IT
+			String value = symbolTable ["IT"].ToString();
+			Boolean matched = false;
+			int i = lineNumber;
+			int j;
+			int DEFAULT = -1;
+			Boolean isComment = false;
+			String LITERAL = "";
+		
+			if (value.Equals ("WIN") || value.Equals ("FAIL")) {
+				LITERAL = "BOOLEAN";
+			} else {
+				//===If numbar Literal ===//
+				Match m = Regex.Match (value, @"^\-?\d*\.\d+\s*");
+				if (m.Success) {
+					LITERAL = "NUMBER";
+				}
+
+				//===If numbr Literal ===//
+				m = Regex.Match (value, @"^\-?\d+\s*");
+				if (m.Success) {
+					LITERAL = "NUMBER";
+				}
+
+				//===If string Literal ===//
+				m = Regex.Match (value, @"^\s*""");
+				if (m.Success) {
+					LITERAL = "STRING";
+				}
+				consoleText.Buffer.Text += LITERAL + "\n";
+			}
+			j = i;
+			for (;j<codes.Length;j++) {
+				//j ANG MINAMANIPULATE NATIN DITO JAMES!
+				Match m = Regex.Match (codes [j], @"^\s*OMG\s*");
+				if (m.Success) {
+					String variable = codes [j];
+					variable = variable.Trim ();
+					variable = variable.Remove (0, m.Value.Length);
+					//consoleText.Buffer.Text += variable + "AND" +value+"\n";
+					if (variable.Equals (value)) {
+						//EQUAL SIYA KAY VAR SO i-EXECUTE NATIN YUNG CODE SA ILALIM NIYA!!!
+						//VVV J+1 ==== NASA ILALIM NI OMG <?>
+						for(var x=j+1;x<codes.Length;x++){
+							//Match z = Regex.Match (codes[x], @"^\s*OMGWTF\s*");
+							Match n = Regex.Match (codes[x], @"^\s*GTFO\s*");
+							Match o = Regex.Match (codes [x], @"^\s*OIC\s*");
+							if (n.Success||o.Success) {
+
+								break;
+							}
+							ParserClass parse = new ParserClass ();
+							parse.parseLines (codes [x],ref isComment,i, ref symbolTable, ref MainWindow.symbolTree, consoleText, codes);
+							j = x;
+						}
+						matched = true;
+					}
+				}
+				m = Regex.Match (codes[j], @"^\s*OMGWTF\s*");
+				if (m.Success) {
+					DEFAULT = j;
+				}
+
+
+				m = Regex.Match (codes [j], @"^\s*OIC\s*$");
+				if (m.Success) {
+					if (!matched) {
+						if (DEFAULT > 0) {
+							//IF MAY DEFAULT (OMGWTF)
+							//DEFAULT AY LOCATION NI OMGWTF
+							//DEFAULT + 1 = ILALIM NIYA NA STATEMENT. EXECUTE TIL END OF STATEMENT!
+							for (var x=DEFAULT+1; x<codes.Length; x++) {
+								Match z = Regex.Match (codes [x], @"^\s*OMG\s*");
+								Match n = Regex.Match (codes [x], @"^\s*GTFO\s*");
+								Match o = Regex.Match (codes [x], @"^\s*OIC\s*");
+								if (n.Success || o.Success || z.Success) {
+
+									break;
+								}
+								ParserClass parse = new ParserClass ();
+								parse.parseLines (codes [x], ref isComment, i, ref symbolTable, ref MainWindow.symbolTree, consoleText, codes);
+								j = x+1;
+							}
+
+						}
+					} 
+						//IF NO VALUE WAS MATCHED HEHEHEHE!!!
+						MainWindow.detectedOIC = true;
+						MainWindow.newIndex = j;
+						consoleText.Buffer.Text += "EVERYTHING IS DONE\n";
+						break;
+
+				}
+			}
+
+		}
 	}
 }

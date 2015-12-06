@@ -92,7 +92,7 @@ public partial class MainWindow: Gtk.Window
 
 		char[] splitToken = {'\n'};
 		String[] lines = code.Split (splitToken);
-
+		symbolTable.Add("IT","NOOB");
 		if(!eval.hasValidStartAndEnd(lines)) {
 			consoleText.Buffer.Text += "Syntax Error at program delimiter\n";
 		} 

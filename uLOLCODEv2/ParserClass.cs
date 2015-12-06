@@ -183,10 +183,13 @@ namespace uLOLCODEv2
 			m = Regex.Match (line, @"^\s*BOTH\s+SAEM\s*");
 			if (m.Success) {
 				line = line.Trim ();
-				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
+				//line = line.Remove (0, m.Value.Length);
+				matchedString = m.Value;
+				matchedString = matchedString.Trim ();
+				//if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
 					//it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
-					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
-				}
+					eval.evaluateComplex (ref symbolTable, consoleText, "IT", line);
+				//}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 		
 			}
@@ -275,14 +278,13 @@ namespace uLOLCODEv2
 			if (m.Success) {
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
-				matchedString = matchedString.Trim ();	
+				matchedString = matchedString.Trim ();
+				eval.evalWTF (codes, lineNumber, symbolTable, consoleText);
 			}
 
 			m = Regex.Match (line, @"^\s*OMG\s*");
 			if (m.Success) {
-				line = line.Remove (0, m.Value.Length);
-				matchedString = m.Value;
-				matchedString = matchedString.Trim ();
+				return;
 			}
 
 			m = Regex.Match (line, @"^\s*GTFO\s*");
