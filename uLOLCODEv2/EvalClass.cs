@@ -669,7 +669,7 @@ namespace uLOLCODEv2
 						Match q = Regex.Match (codes [j], @"^\s*NO\s+WAI\s*");
 						Match r = Regex.Match (codes[j], @"^\s*O\s+RLY\?\s*$");
 						if (n.Success || o.Success || p.Success || q.Success || r.Success) {
-							consoleText.Buffer.Text += "STOP!\n";
+							//consoleText.Buffer.Text += "STOP!\n";
 							i = j;
 							break;
 						} else {
