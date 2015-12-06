@@ -522,6 +522,68 @@ namespace uLOLCODEv2
 			consoleText.Buffer.Text += (value+"\n");
 		}
 
+
+		public String evalMAEK(String input, String type, int lineNumber, ref Hashtable symbolTable, TextView consoleText){
+
+			//Check if the type is valid
+			if (!(type.Equals ("TROOF") || type.Equals ("YARN") || type.Equals ("NUMBR") || type.Equals ("NUMBAR") || type.Equals ("NOOB"))) {
+				consoleText.Buffer.Text += "Syntax error at line: " + lineNumber + ". " + type + " is undefinded\n";
+				return "UNDEFINED";
+			}
+			//Return value based on type requested
+			switch (type) {
+			case "TROOF":
+				{
+					//String literal no content
+					if (Regex.IsMatch (input, @"\s*^""""$")) {
+						return "FAIL";
+					} else if (Regex.IsMatch (input, @"\s*^""\.+""$")) { //string literal with content
+						return "WIN";
+					} else if (Regex.IsMatch (input, @"^\-?[0]*.?[0]+\s*")) { // IF 0
+						return "FAIL";
+					} else {
+						return "WIN";
+					}
+				}
+			case "YARN":
+				{
+					//If yarn literal already
+					if (Regex.IsMatch (input, @"\s*^""\.""$")) {
+						//Do not modify
+						return input;
+					} else {
+						//Add quotes and return
+						return "\"" + input + "\"";
+					}
+				}
+			case "NOOB":
+				{
+					return "NOOB";
+				}
+			case "NUMBR":
+				{
+					//consoleText.Buffer.Text += "to Numbr";
+					if (Regex.IsMatch (input, @"^"".*""$")) {
+						consoleText.Buffer.Text += "String to Numbr";
+						input = comp.removeQuotes (input);
+						int answer;
+						Boolean isInteger = Int32.TryParse (input, out answer);
+						if (isInteger) {
+							return answer.ToString ();
+						}
+						return "BAWAL ITO.";
+					}
+					return (input.Equals ("WIN") ? "1" : "0");
+				}
+			case "NUMBAR":
+				{
+					input = comp.removeQuotes (input);
+					return input;
+				}
+			}
+			return "UNDEFINED";
+		}
+
 		public void evalORLY(String[] codes,int lineNumber,Hashtable symbolTable,TextView consoleText){
 			/*IF ORLY IS DETECTED
 			 * CHECK VALUE OF IT

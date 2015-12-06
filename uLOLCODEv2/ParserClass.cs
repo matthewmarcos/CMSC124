@@ -216,7 +216,21 @@ namespace uLOLCODEv2
 
 			m = Regex.Match (line, @"^\s*MAEK\s*");
 			if (m.Success) {
-								
+				line = line.Remove (0, m.Value.Length);
+				line = line.Trim();
+				//MAEK <expression> [A] <type>
+				//get the type and the variable to put it in
+				// evaluate expression
+				// typecast with eval.evalMAEK(input, type, lineNumber, ref symbolTable, consoleText);
+				// update source with the value
+
+				String[] inputs = Regex.Split(line, @"\s+A\s+");
+				m = Regex.Match (inputs[0], @"[a-zA-Z][a-zA-z\d]*$");
+				if (m.Success && symbolTable.ContainsKey(m.Value)) {
+					inputs [0] = symbolTable [m.Value].ToString ();
+					symbolTable [m.Value] = eval.evalMAEK(inputs[0].Trim(), inputs[1].Trim(), lineNumber, ref symbolTable, consoleText);
+				}
+					
 			}
 
 			m = Regex.Match (line, @"^A\s*");

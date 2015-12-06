@@ -3,3 +3,8 @@ C:\Users\Matthew\Documents\CMSC124\uLOLCODEv2\bin\Debug\uLOLCODEv2.pdb
 C:\Users\Matthew\Documents\CMSC124\uLOLCODEv2\obj\x86\Debug\uLOLCODEv2.csprojResolveAssemblyReference.cache
 C:\Users\Matthew\Documents\CMSC124\uLOLCODEv2\obj\x86\Debug\uLOLCODEv2.exe
 C:\Users\Matthew\Documents\CMSC124\uLOLCODEv2\obj\x86\Debug\uLOLCODEv2.pdb
+C:\Users\Matthew\Documents\Dapat\CMSC124\uLOLCODEv2\obj\x86\Debug\uLOLCODEv2.csprojResolveAssemblyReference.cache
+C:\Users\Matthew\Documents\Dapat\CMSC124\uLOLCODEv2\obj\x86\Debug\uLOLCODEv2.exe
+C:\Users\Matthew\Documents\Dapat\CMSC124\uLOLCODEv2\bin\Debug\uLOLCODEv2.exe
+C:\Users\Matthew\Documents\Dapat\CMSC124\uLOLCODEv2\bin\Debug\uLOLCODEv2.pdb
+C:\Users\Matthew\Documents\Dapat\CMSC124\uLOLCODEv2\obj\x86\Debug\uLOLCODEv2.pdb
