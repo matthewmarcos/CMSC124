@@ -22,7 +22,7 @@ public partial class MainWindow: Gtk.Window
 	EvalClass eval = new EvalClass ();
 	LexerClass lexer = new LexerClass();
 	ParserClass parser = new ParserClass ();
-	TestClass test = new TestClass();
+	//TestClass test = new TestClass();
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{	
