@@ -21,18 +21,14 @@ namespace uLOLCODEv2
 			Match m;
 			String expression = exp;
 			Stack stack = new Stack ();
-			//Boolean[,] isInfiniteArity;
 			int[] mkTier;
 			mkTier = new int [225];
 			int currTier = 0;
 			for (int i = 0; i < 225; i++) {
 				mkTier [i] = 0;
 			}
-			Boolean infiniteArity = false;
-			//consoleText.Buffer.Text += expression + "\n";
 
 			while (!String.IsNullOrEmpty (expression)) {
-				
 				//Win literal
 				m = Regex.Match (expression, @"WIN$");
 				if (m.Success) {
@@ -57,7 +53,7 @@ namespace uLOLCODEv2
 					continue;
 				} 	
 
-				//varident
+				//Variable Identifier
 				m = Regex.Match (expression, @"[a-zA-Z][a-zA-z\d]*$");
 				if (m.Success && symbolTable.ContainsKey(m.Value)) {
 					expression = expression.Remove (m.Index, m.Value.Length);
@@ -67,8 +63,6 @@ namespace uLOLCODEv2
 					String myValue = symbolTable[m.Value].ToString();
 					int number;
 					Boolean isNumeric = int.TryParse(myValue, out number);
-
-					//stack.Push (5);
 
 					m = Regex.Match (myValue, @"\s*"".*""$");
 
@@ -129,7 +123,6 @@ namespace uLOLCODEv2
 				if (m.Success) {
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
-					//consoleText.Buffer.Text += expression + "\n";
 					continue;
 				}
 
@@ -140,11 +133,11 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push (op1 + op2);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push (op1 + op2);
@@ -162,11 +155,11 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push (op1 - op2);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push (op1 - op2);
@@ -184,11 +177,11 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push (op1 * op2);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push (op1 * op2);
@@ -210,11 +203,11 @@ namespace uLOLCODEv2
 					if (b.Equals("0")) {
 						return "UNDEFINED";
 					}
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push (op1 / op2);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push (op1 / op2);
@@ -235,11 +228,11 @@ namespace uLOLCODEv2
 					if (b.Equals("0")) {
 						return "UNDEFINED";
 					}
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push (op1 % op2);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push (op1 % op2);
@@ -258,11 +251,11 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push ((op1 > op2) ? op1 : op2);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push ((op1 > op2) ? op1 : op2);
@@ -280,11 +273,11 @@ namespace uLOLCODEv2
 					var a = stack.Pop ().ToString();
 					var b = stack.Pop ().ToString();
 
-					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {
+					if(a.IndexOf(".") == 1 || b.IndexOf(".") == 1) {//if 1 or both ops are float
 						float op1 = float.Parse(a);
 						float op2 = float.Parse(b);
 						stack.Push ((op1 > op2) ? op2 : op1);
-					} else {
+					} else {//both ops are int
 						int op1 = Int32.Parse(a);
 						int op2 = Int32.Parse(b);
 						stack.Push ((op1 > op2) ? op2 : op1);
@@ -300,6 +293,7 @@ namespace uLOLCODEv2
 					expression = expression.Remove (m.Index, m.Value.Length);
 					expression = expression.Trim ();
 					var a = (Boolean)stack.Pop ();
+
 					stack.Push (!a);
 					continue;
 				}
@@ -311,9 +305,7 @@ namespace uLOLCODEv2
 					var a = (Boolean)stack.Pop ();
 					var b = (Boolean)stack.Pop ();
 
-					// (a || b) && (!a || !b)
 					stack.Push ((a || b) && !(a && b));
-
 					continue;
 				}
 
@@ -325,7 +317,6 @@ namespace uLOLCODEv2
 					var b = (Boolean)stack.Pop ();
 
 					stack.Push (a || b);
-
 					continue;
 				}
 
@@ -337,10 +328,8 @@ namespace uLOLCODEv2
 					var b = Convert.ToBoolean (stack.Pop ().ToString());
 
 					stack.Push (a && b);
-
 					continue;
 				}
-
 
 				m = Regex.Match (expression, @"BOTH\s+SAEM$");
 				if (m.Success) {
@@ -350,7 +339,6 @@ namespace uLOLCODEv2
 					var b = stack.Pop ().ToString();
 
 					stack.Push (a.Equals(b));
-
 					continue;
 				}
 
@@ -362,7 +350,6 @@ namespace uLOLCODEv2
 					var b = stack.Pop ().ToString();
 
 					stack.Push (a != b);
-
 					continue;
 				}
 
@@ -396,7 +383,6 @@ namespace uLOLCODEv2
 						tempString += strings [i];
 					}
 					stack.Push ("\"" + tempString + "\"");
-					//continue;
 					currTier--;
 					continue; 
 				}
@@ -429,7 +415,6 @@ namespace uLOLCODEv2
 						answer = answer && bools [i];					
 					}
 					stack.Push (answer);
-					//continue;
 					currTier--;
 					continue; 
 				}
@@ -461,7 +446,6 @@ namespace uLOLCODEv2
 						answer = answer || bools [i];					
 					}
 					stack.Push (answer);
-					//continue;
 					currTier--;
 					continue; 
 				}
@@ -476,7 +460,7 @@ namespace uLOLCODEv2
 				}
 
 				return "UNDEFINED Expression " + expression;
-			}
+			}//End of main loop
 
 			String result = stack.Pop ().ToString();
 			if (result.Equals ("True")) {
@@ -486,8 +470,7 @@ namespace uLOLCODEv2
 			} else {
 				return result;
 			}
-			//return stack.Pop ().ToString();
 		}
-	}
+	}//End of ComplexEvaluatorClass
 }
 

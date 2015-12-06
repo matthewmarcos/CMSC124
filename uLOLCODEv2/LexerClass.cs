@@ -19,8 +19,6 @@ namespace uLOLCODEv2
 			String matchedString;
 
 			while (line.Length != 0) {
-				//consoleText.Buffer.Text += ("Value of Flag: " + isComment + "\n");
-				//updateSymbolTable ();
 				if(isComment) {
 					m = Regex.Match (line, @"^TLDR$");
 					if (m.Success) {
@@ -77,8 +75,6 @@ namespace uLOLCODEv2
 					matchedString = m.Value;
 					matchedString = matchedString.Trim ();
 					lexModel.AppendValues (matchedString, "Var Declaration");
-
-				//	eval.varDecEval (line, symbolTable, consoleText, lineNumber);
 					continue;
 				}
 
@@ -106,7 +102,6 @@ namespace uLOLCODEv2
 					matchedString = m.Value;
 					matchedString = matchedString.Trim ();
 					lexModel.AppendValues (matchedString, "Addition Op");
-					// evaluateComplex(ref symbolTable, consoleText, "IT", line);
 					continue;
 				}
 
@@ -314,8 +309,6 @@ namespace uLOLCODEv2
 					matchedString = m.Value;
 					matchedString = matchedString.Trim ();
 					lexModel.AppendValues (matchedString, "Print Op");
-
-				//	eval.evalVisible (line, symbolTable, consoleText, lineNumber);
 					continue;
 				}
 
@@ -325,7 +318,6 @@ namespace uLOLCODEv2
 					matchedString = m.Value;
 					matchedString = matchedString.Trim ();
 					lexModel.AppendValues (matchedString, "Scan Op");
-				//	eval.evalGimmeh (line, symbolTable,consoleText,lineNumber,symbolTree);
 					continue;
 				}
 
@@ -416,15 +408,6 @@ namespace uLOLCODEv2
 					matchedString = m.Value;
 					matchedString = matchedString.Trim ();
 					lexModel.AppendValues (matchedString, "Var Identifier");
-					//Check if matchedString matches a reserved word
-				//	if (eval.isValidVarident (matchedString)) {
-				//		matchedString = matchedString.Trim ();
-				//		lexModel.AppendValues (matchedString, "Var Identifier");
-				//	} else {
-				//		consoleText.Buffer.Text += "Error: Invalid variable identifier " +
-				//			matchedString + " at line " + lineNumber + "\n";
-				//	}
-
 					continue;
 				}
 
@@ -438,13 +421,7 @@ namespace uLOLCODEv2
 					for(; line.Length > 0 && line[0] != '"';) {
 						stringLiteral += line[0];
 						line = line.Remove(0, 1);
-						//consoleText.Buffer.Text += "stringLiteral: " + stringLiteral + 
-						//	" line: " + line + lineNumber
-						//	" length: " + line.Length + "\n";
 					}
-					//lexModel.AppendValues (stringLiteral, "String Literal");
-					//lexModel.AppendValues (line[0] + "", "End string Delimiter");
-					//line = line.Remove(0, 1);
 
 					if(line.Length != 0) {
 						lexModel.AppendValues (stringLiteral, "String Literal");
@@ -455,7 +432,6 @@ namespace uLOLCODEv2
 						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "! (unpaired quotes)\n";
 						break;
 					}
-
 					continue;
 				}
 
@@ -477,13 +453,11 @@ namespace uLOLCODEv2
 					continue;
 				}
 
-
+				//if does not match any of the above, print error
 				consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + "!\n";
 				break;
-
-
 			} //End of main loop
-		}
-	}
+		}//End of parseLines()
+	}//End of LexerClass
 }
 

@@ -33,7 +33,6 @@ public partial class MainWindow: Gtk.Window
 
 	public void populateTreeView(){
 		//instantiate 2 columns
-
 		Gtk.TreeViewColumn lexemeCol = new Gtk.TreeViewColumn ();
 		lexemeCol.Title = "Lexeme";
 
@@ -52,7 +51,6 @@ public partial class MainWindow: Gtk.Window
 
 		lexemeCol.AddAttribute (lexemeCell, "text", 0);
 		classificationCol.AddAttribute (classCell, "text", 1);
-
 
 		//===================================================//
 
@@ -128,8 +126,7 @@ public partial class MainWindow: Gtk.Window
 
 		if( fileOpen.Run() == (int)ResponseType.Accept){
 			//open file for reading
-
-			System.IO.StreamReader file = System.IO.File.OpenText(fileOpen.Filename);	//open the file.
+			System.IO.StreamReader file = System.IO.File.OpenText(fileOpen.Filename);
 
 			//display in the textbox
 			inputCode.Buffer.Text = file.ReadToEnd();

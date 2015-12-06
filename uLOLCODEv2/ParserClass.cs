@@ -21,17 +21,12 @@ namespace uLOLCODEv2
 			String matchedString;
 			String it = "";
 
-			//consoleText.Buffer.Text += ("Value of Flag: " + isComment + "\n");
 			updateSymbolTable (ref symbolTable, ref symbolTree);
 			if(isComment) {
 				m = Regex.Match (line, @"^TLDR$");
 				if (m.Success) {
 					isComment = false;
-		//			lexModel.AppendValues (m.Value, "End of Multi-Comment");
-					
 				}
-		//		lexModel.AppendValues (line, "Multi Line Comment");
-				
 			}
 
 			m = Regex.Match (line, @"^KTHXBYE$");
@@ -39,8 +34,6 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "End of Program");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*BTW");
@@ -48,10 +41,7 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Start of Single Comment");
-		//		lexModel.AppendValues (line, "Single Line Comment");
 				line = line.Remove (0, line.Length);
-				
 			}
 
 			m = Regex.Match (line, @"^OBTW$");
@@ -59,9 +49,7 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Start of Multi-Comment");
 				isComment = true;
-				
 			}
 
 			m = Regex.Match (line, @"^\s*I\s+HAS\s+A\s*");
@@ -69,19 +57,15 @@ namespace uLOLCODEv2
 				line = line.Remove (0, m.Value.Length);
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
-		//		lexModel.AppendValues (matchedString, "Var Declaration");
 
 				eval.varDecEval (line, symbolTable, consoleText, lineNumber);
-
 				return;
-
 			}
 
 			m = Regex.Match (line, @"^\s*SUM\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
@@ -93,33 +77,28 @@ namespace uLOLCODEv2
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
-				
 			}
 
 			m = Regex.Match (line, @"^\s*PRODUKT\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
-				
 			}
 
 			m = Regex.Match (line, @"^\s*QUOSHUNT\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
@@ -131,76 +110,63 @@ namespace uLOLCODEv2
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
-				
 			}
 
 			m = Regex.Match (line, @"^\s*BIGGR\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
-				
 			}
 
 			m = Regex.Match (line, @"^\s*SMALLR\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexArithmetic(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
 				return;
-				
 			}
 
 			m = Regex.Match (line, @"^\s*BOTH\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
-		//		lexModel.AppendValues (matchedString, "AND Op");
-				
 			}
 
 			m = Regex.Match (line, @"^\s*EITHER\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
-				
 			}
 
 			m = Regex.Match (line, @"^\s*WON\s+OF\s*");
 			if (m.Success) {
 				line = line.Trim ();
 				if(eval.isValidComplexBoolean(line, consoleText, symbolTable)) {
-					// consoleText.Buffer.Text += eval.evalComplexArithmetic(line, consoleText, symbolTable).ToString() + "\n";
 					it = comp.evaluateComplexExpression(line, consoleText, symbolTable).ToString();
 					eval.evaluateComplex (ref symbolTable, consoleText, "IT", it);
 				}
 				consoleText.Buffer.Text += "IT: " + it + "\n";
-				
 			}
 
 			m = Regex.Match (line, @"^\s*NOT\s*");
@@ -272,7 +238,6 @@ namespace uLOLCODEv2
 				matchedString = m.Value;
 				matchedString = matchedString.Trim ();
 
-		//		lexModel.AppendValues (matchedString, "Start of If-Then");
 				eval.evalORLY (codes,lineNumber, symbolTable,consoleText);
 
 			}
@@ -343,8 +308,6 @@ namespace uLOLCODEv2
 				line = line.Remove(0, varident.Length);
 
 				if (eval.isValidVarident(variable)) {
-					// consoleText.Buffer.Text += "Variable: " + variable + "\n";
-					// consoleText.Buffer.Text += "Line: " + line + "\n";
 					eval.varAssignEval (variable, line, ref symbolTable, consoleText, lineNumber);
 				}
 			}
@@ -367,11 +330,13 @@ namespace uLOLCODEv2
 				}
 			}
 
+			//Numbar Literal
 			m = Regex.Match (line, @"^\-?\d*\.\d+\s*");
 			if (m.Success) {
 				return;
 			}
 
+			//Numbr Literal
 			m = Regex.Match (line, @"^\-?\d+\s*");
 			if (m.Success) {
 				return;
@@ -384,6 +349,6 @@ namespace uLOLCODEv2
 				symbolTree.AppendValues (pair.Key, pair.Value);
 			}
 		}
-	}
+	}//End of ParserClass
 }
 
