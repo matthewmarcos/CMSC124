@@ -124,28 +124,43 @@ namespace uLOLCODEv2
 		public void evalVisible(String line, Hashtable symbolTable, TextView consoleText, int lineNumber) {
 			Match m;
 				//======Start of string literal eval ============//
-
+				Char splitToken = ' ';
+				String[] holder = line.Split (splitToken);
+				line = line.Trim ();
+				
 				m = Regex.Match (line, @"^\s*""");
 				if (m.Success) {
 					String sline = line;		//<--- for clarity's sake
 					String stringLiteral = "";
+					int i = 1;
+					//	int limit = sline.Length - 1;
 						//if the string has a paired quotation marks
-					if(sline.EndsWith("\"")){
-						for(var i = 0; i < sline.Length;i++){
-							if (i==0 || i==(sline.Length-1) ){
-								continue;
-							}
-							else{
-								stringLiteral += sline [i];
-								}
-							}
-							consoleText.Buffer.Text += stringLiteral+"\n";
+					while (!sline[i].Equals('"') && i!=sline.Length-1) {
+						stringLiteral += sline [i];
+						//line = line.Remove (i, 1);
+						i++;					
+					} 
+
+					if (sline [i].Equals ('"')) {
+						
+					} else {
+						//THROW AN ERROR IF UNPAIRED STRING "<String....> ...<end>
+						consoleText.Buffer.Text += "Syntax Error at line " + lineNumber + ": Variable undeclared(Visible Func)\n";
+						return;
 					}
-					else{
-						consoleText.Buffer.Text += "Expected error at line " + lineNumber + ", Unpaired quotes! (Visible Func)\n";
+					consoleText.Buffer.Text += stringLiteral;
+					//something about i+1 is equal to the last character of the passed string. wala nang kadugtong
+					if (i + 1 == sline.Length) {
+						consoleText.Buffer.Text += "\n";
+						return;
+					} else {
+						i = i + 2; //this will either equal to the WORD following this STRING LITERAL "<this>"[i is here]...
+						//let sline.Substring be the following stuffs.
+						sline = sline.Substring (i);
+						//pass it again to this function:)
+						evalVisible (sline, symbolTable, consoleText, lineNumber);
 					}
 
-					return;
 				}
 				//=======End of String Literal Eval ============//
 
@@ -155,16 +170,37 @@ namespace uLOLCODEv2
 						//If wala sa symbol table
 					if(!symbolTable.ContainsKey(line)) {
 						consoleText.Buffer.Text += ("Expected error at line " + lineNumber + ", Variable undeclared! (Visible Func)\n");
+				}
+				m = Regex.Match (holder[0], @"^\s*[a-zA-Z][a-zA-z\d]*\s*$");
+				if(isValidVarident(holder[0]) && m.Success) {
+				String stringLine = "";
+				String sline = line;
+				//If wala sa symbol table
+					
+					if(!symbolTable.ContainsKey(holder[0])) {
+						consoleText.Buffer.Text += ("Expected error at line " + lineNumber + ": Variable undeclared(Visible Func)\n");
 						return;
 					} else {
 							//IF NASA SYMBOL TABLE NA PRINT YUNG VALUE
-						var stringLit = symbolTable[line];
+					var stringLit = symbolTable[holder[0]];
 						String printThis = stringLit.ToString();//<------ Gawin String yung returned object;
-						//Check if STRING OR NUM
+						//Check if STRING OR NUM then PRINT
 						fixVISIBLE (printThis,consoleText);
-						return;
+						
+						//if the ARRAY holder contains only 1 element, then VISIBLE <VAR> lang. ELSE RETURN TO EVALUATE!
+						if (holder.Length == 1) {
+							consoleText.Buffer.Text += "\n";
+							return;
+						} else {
+							sline = sline.Remove (0, holder [0].Length);
+							sline = sline.Trim ();
+							//then pass it to a this function again...
+							evalVisible (sline, symbolTable, consoleText, lineNumber);
+						}
+						
 					}
 				}
+			}
 				//==================END OF VAR EVAL=====================//
 			
 				//==================Numbar Literal =====================//
@@ -453,23 +489,24 @@ namespace uLOLCODEv2
 		public void fixVISIBLE(String value,TextView consoleText){
 			String handler;
 			String toPrint = "";
+
 			Match m = Regex.Match (value, @"^\-?\d*\.\d+\s*");
 			if (m.Success) {
 				handler = m.Value;
-				consoleText.Buffer.Text += (handler+"\n");
+				consoleText.Buffer.Text += (handler);
 				return;
 			}
 
 			m = Regex.Match (value, @"^\-?\d+\s*");
 			if (m.Success) {
 				handler = m.Value;
-				consoleText.Buffer.Text += (handler+"\n");
+				consoleText.Buffer.Text += (handler);
 				return;
 			}
 
 			m = Regex.Match (value, @"^\s*""");
 			if (m.Success) {
-				handler = m.Value;
+				handler = value;
 				for (var i=0; i<handler.Length; i++) {
 					if (i == 0 || i == handler.Length - 1) {
 						continue;
@@ -477,7 +514,7 @@ namespace uLOLCODEv2
 						toPrint += handler[i];
 					}
 				}
-				consoleText.Buffer.Text += (toPrint + "\n");
+				consoleText.Buffer.Text += (toPrint);
 				return;
 			}
 
